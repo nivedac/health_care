@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book Token - Dr. Baiju's Healthcare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1d",
+                        "secondary": "#56615c",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#95d5a8",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#141e1a",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3f4941",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#7ed99e",
+                        "secondary-container": "#dae5df",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-container": "#268451",
+                        "on-primary-fixed": "#00210f",
+                        "outline-variant": "#becabe",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-container": "#5c6762",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed-variant": "#00522d",
+                        "tertiary-container": "#43815b",
+                        "surface-dim": "#d9dadb",
+                        "inverse-primary": "#7ed99e",
+                        "surface-tint": "#006d3d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#0e5130",
+                        "outline": "#6f7a70",
+                        "surface": "#f8f9fa",
+                        "primary-fixed": "#9af6b8",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#f6fff5",
+                        "primary": "#006a3b",
+                        "inverse-surface": "#2e3132",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#00210f",
+                        "on-primary-container": "#f6fff4",
+                        "surface-container-highest": "#e1e3e4",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#296743",
+                        "secondary-fixed": "#dae5df",
+                        "tertiary-fixed": "#b0f1c3",
+                        "secondary-fixed-dim": "#bec9c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-margin": "24px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .pt-safe { padding-top: env(safe-area-inset-top); }
+        
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-sans pt-safe pb-safe selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center justify-between px-container-margin py-unit h-16">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">Dr. Baiju's Healthcare</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container/20">
+<img alt="Doctor profile picture" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male doctor wearing a white coat and a stethoscope around his neck, smiling warmly in a bright, modern clinical setting with soft natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeNJCeWpV4Z0m4WnF8jYs0xb2TCNWUzLnP_A1mnOBpdxiMvP8cKF0baK1WDyeaPA1PupUE5rnNHu9sjO2lDpI0-As01ICeP0vTjl6uI6FHNUPX2ukZWJGyVen5P_8WdIyXOMHG670IPvCeLBiX9UkHKHlC3WM2b6tlS2-Q1i-h5PA5nF7Z8bZ77Q0lDk8r_Ba5Qua4R1nMXE0KVRPqVuBX5oCFW8Cccmi1txgFvwHZusC6GwcrlVGWMpcKJN__IkbUWlgNMRr-aw"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-container-margin pt-[88px] pb-[100px] max-w-2xl mx-auto w-full flex flex-col gap-stack-lg">
+<!-- Doctor Info Card -->
+<section class="bg-surface-container-lowest rounded-[20px] p-stack-md card-shadow border border-surface-container-low relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10"></div>
+<div class="flex items-start gap-gutter">
+<div class="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0">
+<img alt="Dr. Baiju" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male doctor wearing a white coat and a stethoscope around his neck, smiling warmly in a bright, modern clinical setting with soft natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx7EydRwTiRDUurpArV0eJbyMJY6LsrPjRsfexFhgAsYn-q81g91L9q5qEecAHr2Ien-e_nmXQXBmz1z00GKM89KBGsNu23Sh3i8nthq9C6JjHYC4j_WnpWq7BjNDEzE_BVvmxFQPkamP3wPciL43jjWmM6ABahF-oeGckIjrCL24Uv29QvD7z8loXEmmOTIw53kXLmvDaKNafoCV-xfOMnjzGS_832q8QzOWCWijmHLS-eBhbstJdYq_xri_WZPEcUsFUrVX2Yw"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-unit">
+<h2 class="font-title-md text-title-md text-on-surface">Dr. Baiju</h2>
+<span class="bg-primary-container/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+                            Available
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="stethoscope">stethoscope</span>
+                        General Physician
+                    </p>
+<div class="bg-surface-container-low rounded-lg p-3 mt-stack-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-0.5">Today's Timing</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">4:30 PM - 7:30 PM</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Booking Details Grid -->
+<section class="flex flex-col gap-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface mb-unit">Booking Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Appointment Type -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md card-shadow border border-surface-container-low flex flex-col justify-between">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary mb-3">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Appointment Type</p>
+<p class="font-body-lg text-body-lg text-on-surface font-medium">General Consultation</p>
+</div>
+<!-- Estimated Waiting -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md card-shadow border border-surface-container-low flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-primary/30 transition-colors">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-10 h-10 rounded-full bg-error-container/30 flex items-center justify-center text-error mb-3">
+<span class="material-symbols-outlined" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Estimated Waiting</p>
+<div class="flex items-baseline gap-2">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">45</p>
+<p class="font-body-md text-body-md text-on-surface-variant">mins</p>
+</div>
+</div>
+<!-- Approx Consultation Time -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md card-shadow border border-surface-container-low flex flex-col justify-between">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center text-tertiary mb-3">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Approx Consultation</p>
+<div class="flex items-baseline gap-2">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">15</p>
+<p class="font-body-md text-body-md text-on-surface-variant">mins</p>
+</div>
+</div>
+<!-- Available Tokens -->
+<div class="bg-primary-container text-on-primary-container rounded-[20px] p-stack-md card-shadow flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+<div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-on-primary-container mb-3 backdrop-blur-md">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-primary-container/80 uppercase mb-1">Available Tokens</p>
+<div class="flex items-baseline gap-2">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container">12</p>
+<p class="font-body-md text-body-md text-on-primary-container/80">slots left</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Patient Selection (Mock) -->
+<section class="bg-surface-container-lowest rounded-[20px] p-stack-md card-shadow border border-surface-container-low">
+<div class="flex items-center justify-between mb-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface">Patient Details</h3>
+<button class="text-primary font-body-md text-body-md font-medium hover:underline">Change</button>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-xl border border-outline-variant/50 bg-surface-bright">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="font-title-md text-title-md">JD</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface font-medium">John Doe</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Self • 32 Yrs</p>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Area -->
+<div class="fixed bottom-0 w-full z-50 bg-surface/90 backdrop-blur-xl border-t border-surface-container-low p-container-margin pb-safe flex flex-col gap-3 md:hidden">
+<div class="flex justify-between items-center mb-1">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Consultation Fee</p>
+<p class="font-title-md text-title-md text-on-surface">₹500</p>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-body-lg text-body-lg font-medium hover:opacity-90 active:scale-95 transition-all shadow-md flex items-center gap-2">
+                Book Now
+                <span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Desktop Floating Action -->
+<div class="hidden md:flex fixed bottom-8 right-8 z-50 flex-col items-end gap-4">
+<div class="bg-surface-container-lowest rounded-2xl p-4 card-shadow border border-surface-container-low w-64">
+<div class="flex justify-between items-center mb-4">
+<p class="font-body-md text-body-md text-on-surface-variant">Consultation Fee</p>
+<p class="font-title-md text-title-md text-on-surface">₹500</p>
+</div>
+<button class="w-full bg-primary text-on-primary py-3 rounded-full font-body-lg text-body-lg font-medium hover:opacity-90 active:scale-95 transition-all shadow-md flex justify-center items-center gap-2">
+                Book Token
+                <span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

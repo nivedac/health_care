@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointment History - Dr. Baiju's Healthcare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1d",
+                        "secondary": "#56615c",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#95d5a8",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#141e1a",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3f4941",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#7ed99e",
+                        "secondary-container": "#dae5df",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-container": "#268451",
+                        "on-primary-fixed": "#00210f",
+                        "outline-variant": "#becabe",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-container": "#5c6762",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed-variant": "#00522d",
+                        "tertiary-container": "#43815b",
+                        "surface-dim": "#d9dadb",
+                        "inverse-primary": "#7ed99e",
+                        "surface-tint": "#006d3d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#0e5130",
+                        "outline": "#6f7a70",
+                        "surface": "#f8f9fa",
+                        "primary-fixed": "#9af6b8",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#f6fff5",
+                        "primary": "#006a3b",
+                        "inverse-surface": "#2e3132",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#00210f",
+                        "on-primary-container": "#f6fff4",
+                        "surface-container-highest": "#e1e3e4",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#296743",
+                        "secondary-fixed": "#dae5df",
+                        "tertiary-fixed": "#b0f1c3",
+                        "secondary-fixed-dim": "#bec9c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-margin": "24px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa; /* Force light mode background despite dark class */
+            color: #191c1d;
+        }
+        /* Override dark mode text colors since we're forcing a light theme look */
+        .dark\:text-primary-fixed-dim { color: #006a3b !important; }
+        .dark\:bg-surface-dim\/80 { background-color: rgba(248,249,250,0.8) !important; }
+        .dark\:text-on-surface-variant { color: #3f4941 !important; }
+        .dark\:bg-primary { background-color: #268451 !important; }
+        .dark\:text-on-primary { color: #f6fff4 !important; }
+        .dark\:text-secondary-fixed-dim { color: #56615c !important; }
+        .dark\:hover\:bg-secondary\/20:hover { background-color: rgba(218,229,223,0.5) !important; }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e1e3e4;
+            z-index: 0;
+        }
+        @media (min-width: 768px) {
+            .timeline-line::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen pb-24 md:pb-0 pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm bg-transparent flex items-center justify-between px-container-margin py-unit h-16">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container shadow-sm">
+<img alt="Doctor profile picture" class="w-full h-full object-cover" data-alt="A professional headshot of a female doctor in a white lab coat, well-lit studio lighting, modern medical environment, shallow depth of field, high-end corporate photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrZmJ28bbnDZyO75uRWWk-mJ8RYv8cljaz0ZIBQhUmKcDZEKfdJkzsr36HMoKMl2hIa79-IjQ8tgltSmfhNPtjSf5YUFmbC5707j5ZB9gEyHXst28sKn1tWSAhyj3vPkRfCLSl1PM1JuWhMuAQsYGM8nn1HX79t1TGR0wHRbMRiTI1zy7igj5jaajbRdbXGHB-ClGnNZmLxS3CDLIbTFeu5AdCvd2zGPdW1aajLooaxKqDRmxiudB-8TaCHiVdLoFpndstRQxN5w"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">Dr. Baiju's Healthcare</h1>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex gap-8 items-center mr-8">
+<a class="font-title-md text-title-md text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity scale-95 duration-300 ease-out-expo flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span> Home
+            </a>
+<a class="font-title-md text-title-md text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity scale-95 duration-300 ease-out-expo flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span> Appointments
+            </a>
+<a class="font-title-md text-title-md text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity scale-95 duration-300 ease-out-expo flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span> Notifications
+            </a>
+<a class="font-title-md text-title-md text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity scale-95 duration-300 ease-out-expo flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span> Profile
+            </a>
+</nav>
+<button class="text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity scale-95 duration-300 ease-out-expo p-2 rounded-full hover:bg-secondary-container/50">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin py-stack-lg mt-8">
+<!-- Header & Search -->
+<div class="mb-stack-lg space-y-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-background mb-2">History</h2>
+<p class="font-body-lg text-body-lg text-secondary">Review your past and upcoming consultations.</p>
+</div>
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" placeholder="Search doctor, token, or date..." type="text"/>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm hover:scale-105 transition-all shadow-sm">All</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-all">Upcoming</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-all">Completed</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-all">Cancelled</button>
+</div>
+</div>
+<!-- Timeline List -->
+<div class="relative timeline-line pt-4">
+<!-- Timeline Item 1: Upcoming -->
+<div class="relative flex items-center md:justify-end mb-12 group">
+<!-- Marker -->
+<div class="absolute left-5 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-surface-container-lowest shadow-sm z-10"></div>
+<div class="ml-12 md:ml-0 md:w-[calc(50%-3rem)] w-full">
+<div class="bg-surface-container-lowest rounded-[20px] p-6 shadow-[0_4px_20px_0_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group-hover:shadow-[0_8px_30px_0_rgba(0,0,0,0.08)]">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-tertiary-fixed-dim/20 to-transparent rounded-bl-[100px]"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider mb-1">Today, 2:30 PM</div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Sarah Jenkins</h3>
+<p class="font-body-md text-body-md text-secondary">Cardiology</p>
+</div>
+<div class="px-3 py-1 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> Upcoming
+                            </div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">confirmation_number</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">Token: #A-402</span>
+</div>
+<button class="text-primary font-label-sm text-label-sm hover:underline">View Details</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2: Completed -->
+<div class="relative flex items-center md:justify-start mb-12 group">
+<div class="absolute left-5 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-surface-variant border-4 border-surface-container-lowest shadow-sm z-10"></div>
+<div class="ml-12 md:ml-0 md:w-[calc(50%-3rem)] w-full">
+<div class="bg-surface-container-lowest rounded-[20px] p-6 shadow-[0_4px_20px_0_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="font-label-sm text-label-sm text-secondary mb-1">Oct 12, 10:00 AM</div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Michael Chen</h3>
+<p class="font-body-md text-body-md text-secondary">General Practice</p>
+</div>
+<div class="px-3 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> Completed
+                            </div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">confirmation_number</span>
+<span class="font-body-md text-body-md text-secondary">Token: #G-115</span>
+</div>
+<div class="flex gap-2">
+<button class="text-primary font-label-sm text-label-sm hover:underline">Prescription</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 3: Cancelled -->
+<div class="relative flex items-center md:justify-end mb-12 group">
+<div class="absolute left-5 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-error border-4 border-surface-container-lowest shadow-sm z-10"></div>
+<div class="ml-12 md:ml-0 md:w-[calc(50%-3rem)] w-full">
+<div class="bg-surface-container-lowest rounded-[20px] p-6 shadow-[0_4px_20px_0_rgba(0,0,0,0.05)] opacity-75 hover:opacity-100 transition-opacity relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="font-label-sm text-label-sm text-secondary mb-1">Sep 28, 4:15 PM</div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Emily Thorne</h3>
+<p class="font-body-md text-body-md text-secondary">Dermatology</p>
+</div>
+<div class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">cancel</span> Cancelled
+                            </div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">confirmation_number</span>
+<span class="font-body-md text-body-md text-secondary line-through">Token: #D-082</span>
+</div>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm hover:bg-surface-variant transition-colors">Rebook</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] bg-transparent flex justify-around items-center px-4 py-2 pb-safe w-full">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all scale-105 duration-300 ease-out-expo p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all scale-105 duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-sm text-label-sm">Appointments</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all scale-105 duration-300 ease-out-expo p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">notifications</span>
+<span class="font-label-sm text-label-sm">Notifications</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all scale-105 duration-300 ease-out-expo p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

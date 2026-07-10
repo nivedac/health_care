@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dr. Baiju's Healthcare - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1d",
+                        "secondary": "#56615c",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#95d5a8",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#141e1a",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3f4941",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#7ed99e",
+                        "secondary-container": "#dae5df",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-container": "#268451",
+                        "on-primary-fixed": "#00210f",
+                        "outline-variant": "#becabe",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-container": "#5c6762",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed-variant": "#00522d",
+                        "tertiary-container": "#43815b",
+                        "surface-dim": "#d9dadb",
+                        "inverse-primary": "#7ed99e",
+                        "surface-tint": "#006d3d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#0e5130",
+                        "outline": "#6f7a70",
+                        "surface": "#f8f9fa",
+                        "primary-fixed": "#9af6b8",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#f6fff5",
+                        "primary": "#006a3b",
+                        "inverse-surface": "#2e3132",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#00210f",
+                        "on-primary-container": "#f6fff4",
+                        "surface-container-highest": "#e1e3e4",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#296743",
+                        "secondary-fixed": "#dae5df",
+                        "tertiary-fixed": "#b0f1c3",
+                        "secondary-fixed-dim": "#bec9c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-margin": "24px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-animation {
+            animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0, 106, 59, 1); box-shadow: 0 0 0 0 rgba(0, 106, 59, 0.4); }
+            50% { border-color: rgba(0, 106, 59, 0.5); box-shadow: 0 0 0 10px rgba(0, 106, 59, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm bg-transparent flex items-center justify-between px-container-margin py-unit h-16 transition-opacity duration-300 ease-out-expo hover:opacity-80 scale-95 md:scale-100">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm" data-alt="A professional headshot of a smiling male doctor in a white coat with a stethoscope around his neck, set against a clean, light medical office background. High-key lighting emphasizing a trustworthy and approachable demeanor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-9BCHX5xqlqNop2SmTWkDvRPSkLavbf5HMxR8Abz1uIUpLsfaMr4xKnWF3F99jdcw_wG2aqU3EIcx-ewF35Jkou2Jya6htYE5NlRHWe_c4ejXs5DvU5A4yeyk66evusYaJEgUH-DLxufwTWL-8nMVWvUvqOKcQkU298bOwRsPhImfQi00rRJbKmbkojYd-7lbJ-3vzVOA2NsXohKrQjEtpitYB02uba0S4AO5_XRHck8aimoeeB2buT47-9bAjhp6BTGjfxjuZg"/>
+<div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">Good Evening, Nived</h1>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-container-margin md:max-w-4xl md:mx-auto pb-stack-lg">
+<!-- Doctor Card -->
+<section class="mb-stack-lg">
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md shadow-[0_4px_40px_0_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-col md:flex-row gap-gutter relative overflow-hidden">
+<!-- Abstract background decoration -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start gap-4 z-10 w-full">
+<img class="w-16 h-16 md:w-24 md:h-24 rounded-[16px] object-cover shadow-sm" data-alt="A close-up portrait of Dr. Baiju, an experienced Indian male doctor with a warm smile, wearing a neat professional shirt and a stethoscope. The background is a slightly blurred, modern clinical setting with soft natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPcyBY-0K0RK34hZV8igjnb038ZckUJH3EZf27kRVtO9aSE9F-_0A_B42Byi9DkRHvD6urhkQtdc1h4Es2nojgLujRlPRgPxbO3ILKvyuSQDhPuSiB4m5PPIAIk1groK2o3LH6EIPOOc2nLLhfYk-1WtGZOtHBw8NmEJueLqCqWg9GRvMueHBIQBgvkxHY8jX1-trs4S4ccFX2TZmhhdqVhR4nlC_InfSlSan2e-cYUdSE9vX37nAYfHcw_9wA0_qtEUNfCylw8Q"/>
+<div class="flex-1">
+<h2 class="font-title-md text-title-md text-on-surface mb-unit">Dr. Baiju</h2>
+<p class="font-body-md text-body-md text-secondary mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">medical_services</span> General Physician
+                        </p>
+<div class="inline-flex items-center gap-2 bg-tertiary-container/10 text-tertiary px-3 py-1.5 rounded-full font-label-sm text-label-sm">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+                            Available Today 4:30 PM - 7:30 PM
+                        </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Queue Dashboard -->
+<section class="mb-stack-lg">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-gutter">
+<!-- Current Token -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md shadow-[0_4px_40px_0_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-col items-center justify-center text-center col-span-2 md:col-span-1">
+<span class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Current Token</span>
+<span class="font-display-lg text-display-lg text-primary">18</span>
+</div>
+<!-- Patients Waiting -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md shadow-[0_4px_40px_0_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-col items-center justify-center text-center">
+<span class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Waiting</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">6</span>
+<span class="material-symbols-outlined text-secondary mt-1 opacity-50">group</span>
+</div>
+<!-- Estimated Time -->
+<div class="bg-surface-container-lowest rounded-[20px] p-stack-md shadow-[0_4px_40px_0_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-col items-center justify-center text-center">
+<span class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Est. Wait</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">38m</span>
+<span class="material-symbols-outlined text-secondary mt-1 opacity-50">schedule</span>
+</div>
+</div>
+</section>
+<!-- Primary Action -->
+<section class="mb-stack-lg flex justify-center">
+<button class="w-full md:w-auto md:min-w-[300px] bg-primary text-on-primary rounded-full py-4 px-8 font-title-md text-title-md flex items-center justify-center gap-3 shadow-[0_8px_30px_rgba(0,106,59,0.3)] hover:scale-[1.02] transition-transform duration-300 ease-out-expo pulse-animation border-2 border-primary">
+<span class="material-symbols-outlined" data-weight="fill">add_circle</span>
+                Book Token
+            </button>
+</section>
+<!-- Quick Actions Bento Grid -->
+<section>
+<h3 class="font-title-md text-title-md text-on-surface mb-stack-md">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-gutter">
+<button class="bg-surface-container-lowest p-stack-md rounded-[20px] shadow-[0_4px_40px_0_rgba(0,0,0,0.03)] border border-surface-container-highest flex flex-col items-start gap-3 hover:bg-surface-container-low transition-colors text-left group">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">Appointments</span>
+</button>
+<button class="bg-surface-container-lowest p-stack-md rounded-[20px] shadow-[0_4px_40px_0_rgba(0,0,0,0.03)] border border-surface-container-highest flex flex-col items-start gap-3 hover:bg-surface-container-low transition-colors text-left group">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 text-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">history</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">History</span>
+</button>
+<button class="bg-surface-container-lowest p-stack-md rounded-[20px] shadow-[0_4px_40px_0_rgba(0,0,0,0.03)] border border-surface-container-highest flex flex-col items-start gap-3 hover:bg-surface-container-low transition-colors text-left group">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 text-tertiary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">directions</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">Directions</span>
+</button>
+<button class="bg-error-container/20 p-stack-md rounded-[20px] shadow-[0_4px_40px_0_rgba(0,0,0,0.03)] border border-error/10 flex flex-col items-start gap-3 hover:bg-error-container/30 transition-colors text-left group">
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">emergency</span>
+</div>
+<span class="font-body-lg text-body-lg text-error font-medium">Emergency</span>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] bg-transparent flex justify-around items-center px-4 py-2 pb-safe w-full">
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 scale-105 duration-300 ease-out-expo hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Appointments</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm mt-1">Notifications</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/50 dark:hover:bg-secondary/20 transition-all px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+<!-- Floating Action Button (Desktop Only) -->
+<button class="hidden md:flex fixed bottom-8 right-8 w-16 h-16 bg-primary text-on-primary rounded-[24px] shadow-lg items-center justify-center hover:scale-105 transition-transform duration-300 ease-out-expo z-50 pulse-animation">
+<span class="material-symbols-outlined text-[32px]" data-weight="fill">add</span>
+</button>
+</body></html>

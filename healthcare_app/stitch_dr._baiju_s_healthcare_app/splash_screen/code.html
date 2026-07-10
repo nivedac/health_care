@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dr. Baiju's Healthcare - Splash Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1d",
+                        "secondary": "#56615c",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#95d5a8",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#141e1a",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3f4941",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#7ed99e",
+                        "secondary-container": "#dae5df",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-container": "#268451",
+                        "on-primary-fixed": "#00210f",
+                        "outline-variant": "#becabe",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-container": "#5c6762",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed-variant": "#00522d",
+                        "tertiary-container": "#43815b",
+                        "surface-dim": "#d9dadb",
+                        "inverse-primary": "#7ed99e",
+                        "surface-tint": "#006d3d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#0e5130",
+                        "outline": "#6f7a70",
+                        "surface": "#f8f9fa",
+                        "primary-fixed": "#9af6b8",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#f6fff5",
+                        "primary": "#006a3b",
+                        "inverse-surface": "#2e3132",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#00210f",
+                        "on-primary-container": "#f6fff4",
+                        "surface-container-highest": "#e1e3e4",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#296743",
+                        "secondary-fixed": "#dae5df",
+                        "tertiary-fixed": "#b0f1c3",
+                        "secondary-fixed-dim": "#bec9c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-margin": "24px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0; }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .fade-in-up-delay-1 { animation-delay: 0.2s; }
+        .fade-in-up-delay-2 { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heartbeat-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden font-body-md text-body-md text-on-background">
+<!-- Decorative Background Elements -->
+<div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-primary-container rounded-full opacity-5 blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-tertiary-container rounded-full opacity-5 blur-[120px] pointer-events-none"></div>
+<main class="flex-1 flex flex-col items-center justify-center z-10 w-full px-container-margin">
+<!-- Logo & Animation Container -->
+<div class="relative mb-stack-lg fade-in-up">
+<!-- Pulsing Rings -->
+<div class="absolute inset-0 bg-primary-container rounded-full pulse-ring blur-md"></div>
+<div class="absolute inset-[-10px] bg-primary-fixed-dim rounded-full pulse-ring blur-lg opacity-30" style="animation-delay: 0.5s;"></div>
+<!-- Central Logo Circle -->
+<div class="relative w-32 h-32 md:w-40 md:h-40 bg-surface rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center justify-center border-2 border-surface-container-highest z-20 overflow-hidden">
+<span class="material-symbols-outlined text-primary text-[64px] md:text-[80px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<!-- SVG Heartbeat Line Overlay -->
+<svg class="absolute inset-0 w-full h-full text-primary-fixed opacity-60" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="heartbeat-path" d="M0 50 L30 50 L40 20 L50 80 L60 40 L70 50 L100 50" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+<!-- Typography -->
+<div class="text-center fade-in-up fade-in-up-delay-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-background mb-stack-sm tracking-tight">
+                Dr. Baiju's Healthcare
+            </h1>
+<p class="font-title-md text-title-md text-secondary">
+                Smart Clinic Management
+            </p>
+</div>
+</main>
+<!-- Footer Branding -->
+<footer class="absolute bottom-safe pb-stack-lg w-full text-center z-10 fade-in-up fade-in-up-delay-2">
+<div class="flex flex-col items-center justify-center opacity-70">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-unit">Powered by</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">Dr. Baiju's Healthcare</span>
+</div>
+</div>
+</footer>
+<script>
+        // Automatic transition to next screen logic (Simulated)
+        // setTimeout(() => {
+        //     document.body.style.opacity = '0';
+        //     document.body.style.transition = 'opacity 0.5s ease-out';
+        //     // window.location.href = '/dashboard';
+        // }, 3500);
+    </script>
+</body></html>

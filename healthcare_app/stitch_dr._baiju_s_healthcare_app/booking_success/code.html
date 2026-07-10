@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Success - Dr. Baiju's Healthcare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#191c1d",
+                      "secondary": "#56615c",
+                      "background": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#95d5a8",
+                      "on-surface": "#191c1d",
+                      "on-secondary-fixed": "#141e1a",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#3f4941",
+                      "on-secondary-fixed-variant": "#3f4945",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#7ed99e",
+                      "secondary-container": "#dae5df",
+                      "surface-container-low": "#f3f4f5",
+                      "primary-container": "#268451",
+                      "on-primary-fixed": "#00210f",
+                      "outline-variant": "#becabe",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-container": "#5c6762",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-fixed-variant": "#00522d",
+                      "tertiary-container": "#43815b",
+                      "surface-dim": "#d9dadb",
+                      "inverse-primary": "#7ed99e",
+                      "surface-tint": "#006d3d",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#0e5130",
+                      "outline": "#6f7a70",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#9af6b8",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-container": "#edeeef",
+                      "on-tertiary-container": "#f6fff5",
+                      "primary": "#006a3b",
+                      "inverse-surface": "#2e3132",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e1e3e4",
+                      "on-tertiary-fixed": "#00210f",
+                      "on-primary-container": "#f6fff4",
+                      "surface-container-highest": "#e1e3e4",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#296743",
+                      "secondary-fixed": "#dae5df",
+                      "tertiary-fixed": "#b0f1c3",
+                      "secondary-fixed-dim": "#bec9c3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "container-margin": "24px",
+                      "stack-md": "16px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB; /* Level 0 Surface */
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+        }
+        .success-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(38, 132, 81, 0.3); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(38, 132, 81, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(38, 132, 81, 0); }
+        }
+        
+        /* Minimal Confetti */
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 16px;
+            background: #268451;
+            opacity: 0;
+            top: 0;
+            border-radius: 4px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-container-margin md:px-0">
+<!-- Confetti Container -->
+<div class="absolute inset-0 pointer-events-none z-0" id="confetti-container"></div>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-md z-10">
+<!-- Glassmorphism Card -->
+<div class="glass-card rounded-[20px] p-stack-lg flex flex-col items-center text-center transform transition-all duration-300 ease-out-expo hover:-translate-y-1">
+<!-- Success Animation Icon -->
+<div class="w-24 h-24 rounded-full bg-primary-container/10 flex items-center justify-center mb-stack-md success-pulse relative">
+<span class="material-symbols-outlined text-primary text-[48px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">
+                    check_circle
+                </span>
+</div>
+<!-- Headers -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background mb-unit">Booking Confirmed!</h1>
+<p class="font-body-lg text-body-lg text-secondary mb-stack-lg">Your appointment has been successfully scheduled.</p>
+<!-- Key Information Grid -->
+<div class="w-full bg-surface-container-low rounded-xl p-stack-md flex flex-col gap-stack-sm mb-stack-lg">
+<div class="flex justify-between items-center py-unit border-b border-surface-variant">
+<span class="font-body-md text-body-md text-secondary">Token Number</span>
+<span class="font-title-md text-title-md text-primary font-bold">24</span>
+</div>
+<div class="flex justify-between items-center py-unit">
+<span class="font-body-md text-body-md text-secondary">Estimated Time</span>
+<span class="font-title-md text-title-md text-on-surface">6:40 PM</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full flex flex-col gap-stack-sm">
+<button class="w-full bg-primary text-on-primary rounded-full py-3 font-body-lg text-body-lg font-medium transition-all duration-300 ease-out-expo hover:scale-[1.02] active:scale-95 shadow-[0_4px_14px_0_rgba(0,106,59,0.39)] hover:shadow-[0_6px_20px_rgba(0,106,59,0.23)]">
+                    View Queue
+                </button>
+<button class="w-full bg-surface-container-high text-primary rounded-full py-3 font-body-lg text-body-lg font-medium transition-all duration-300 ease-out-expo hover:bg-surface-variant hover:scale-[1.02] active:scale-95">
+                    Go Home
+                </button>
+</div>
+</div>
+</main>
+<script>
+        // Minimal Confetti Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#006a3b', '#7ed99e', '#95d5a8', '#f0f1f2'];
+            
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti-piece');
+                
+                // Randomize properties
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100 + 'vw';
+                const animationDuration = Math.random() * 2 + 2 + 's';
+                const animationDelay = Math.random() * 1 + 's';
+                
+                confetti.style.backgroundColor = color;
+                confetti.style.left = left;
+                
+                // Simple CSS animation for falling
+                confetti.animate([
+                    { transform: `translate3d(0, -10vh, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*100 - 50}px, 110vh, 0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 2000 + 1500,
+                    delay: Math.random() * 500,
+                    easing: 'cubic-bezier(.37,0,.63,1)',
+                    fill: 'forwards'
+                });
+                
+                container.appendChild(confetti);
+            }
+        });
+    </script>
+</body></html>

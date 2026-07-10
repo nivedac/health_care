@@ -1,0 +1,356 @@
+<!DOCTYPE html><html lang="en" class="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary-fixed": "#001a41",
+                        "secondary": "#505f76",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#0070eb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-primary": "#adc6ff",
+                        "surface-bright": "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-container": "#eceef0",
+                        "on-error": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-secondary-fixed": "#0b1c30",
+                        "outline": "#717786",
+                        "on-tertiary-container": "#f5fff6",
+                        "secondary-container": "#d0e1fb",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#006947",
+                        "on-surface-variant": "#414755",
+                        "tertiary-container": "#00855b",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#d8dadc",
+                        "inverse-surface": "#2d3133",
+                        "error-container": "#ffdad6",
+                        "primary": "#0058bc",
+                        "on-secondary-container": "#54647a",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-tint": "#005bc1",
+                        "outline-variant": "#c1c6d7",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#d8e2ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed": "#002113",
+                        "background": "#f7f9fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-background": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "64px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-desktop": "32px",
+                        "xs": "4px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    }catch(_e){}</script></head><body class="bg-background text-on-surface overflow-hidden">
+<!-- Desktop SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] bg-surface dark:bg-inverse-surface shadow-sm flex flex-col py-md px-base z-50">
+<div class="mb-lg px-base">
+<h1 class="font-title-lg text-title-lg text-primary dark:text-primary-fixed-dim">MedClinic Pro</h1>
+<p class="text-label-md text-on-surface-variant opacity-70">Reception Portal</p>
+</div>
+<nav class="flex-1 space-y-xs">
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard" data-original-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="queue">queue</span>
+<span class="font-body-md text-body-md">Queue</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Patients</span>
+</div>
+<!-- Active Tab: Walk-in -->
+<div class="flex items-center gap-base p-base rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-secondary-container/50 dark:bg-secondary-container/20 scale-[0.99] transition-transform duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+<span class="font-body-md text-body-md">Walk-in</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="font-body-md text-body-md">Doctors</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="font-body-md text-body-md">Employees</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</div>
+<div class="flex items-center gap-base p-base rounded-lg text-on-surface-variant opacity-80 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</div>
+</nav>
+<div class="mt-auto px-base py-base border-t border-outline-variant flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-md font-bold text-on-surface">Sarah Johnson</span>
+<span class="text-[10px] text-on-surface-variant">Senior Receptionist</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-[64px] sticky top-0 z-40 bg-surface dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<h2 class="font-headline-lg text-headline-lg text-primary">Clinic Management</h2>
+<div class="relative flex items-center bg-surface-container-low px-sm py-xs rounded-full border border-outline-variant w-[320px]">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input type="text" placeholder="Search patients or records..." class="bg-transparent border-none focus:ring-0 text-body-md w-full ml-xs">
+</div>
+</div>
+<div class="flex items-center gap-base">
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+</button>
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="today">today</span>
+</button>
+</div>
+</header>
+<!-- Dashboard Canvas (Background content for the popup) -->
+<div class="flex-1 p-margin-desktop overflow-y-auto space-y-lg">
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Statistics Bento Grid -->
+<div class="col-span-8 grid grid-cols-2 gap-gutter">
+<div class="bg-white p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="pending_actions">pending_actions</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Active Queue</p>
+<h3 class="text-headline-lg font-bold text-on-surface">18</h3>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" data-icon="person_search">person_search</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Walk-ins Today</p>
+<h3 class="text-headline-lg font-bold text-on-surface">42</h3>
+</div>
+</div>
+</div>
+<!-- Doctor Status Card -->
+<div class="col-span-4 bg-primary-container text-on-primary-container p-md rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-title-lg text-title-lg mb-xs">Available Doctors</h4>
+<p class="text-body-md opacity-90 mb-md">General Medicine &amp; Pediatrics</p>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-400"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-500"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-primary-fixed text-[10px] flex items-center justify-center text-primary">+4</div>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-[120px] opacity-10" data-icon="medical_information">medical_information</span>
+</div>
+</div>
+<!-- Recent Queue Table Placeholder -->
+<div class="bg-white rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg">Real-time Queue Status</h3>
+<button class="text-primary text-label-md font-bold hover:underline">View All Patients</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<div class="p-md flex items-center hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-secondary flex items-center justify-center mr-md">#1</div>
+<div class="flex-1">
+<p class="font-title-lg text-body-lg text-on-surface">Alexander Pierce</p>
+<p class="text-label-md text-on-surface-variant">General Checkup • Waiting 12m</p>
+</div>
+<span class="px-sm py-xs bg-tertiary-fixed text-on-tertiary-fixed-variant text-label-md rounded-full">In Consultation</span>
+</div>
+<div class="p-md flex items-center hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-secondary flex items-center justify-center mr-md">#2</div>
+<div class="flex-1">
+<p class="font-title-lg text-body-lg text-on-surface">Sarah McEvoy</p>
+<p class="text-label-md text-on-surface-variant">Pediatric Screening • Waiting 24m</p>
+</div>
+<span class="px-sm py-xs bg-secondary-fixed text-on-secondary-fixed-variant text-label-md rounded-full">Next Up</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Walk-in Patient Modal Overlay -->
+<div id="walkInModal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-margin-mobile">
+<div class="bg-white w-full max-w-[600px] rounded-xl shadow-[0px_12px_32px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300">
+<!-- Modal Header -->
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface">New Walk-in Patient</h2>
+<p class="text-label-md text-on-surface-variant">Generate a queue token immediately</p>
+</div>
+</div>
+<button onclick="document.getElementById('walkInModal').classList.add('hidden')" class="p-base rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Content (Form) -->
+<div class="p-lg space-y-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Name -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Full Name</label>
+<div class="relative">
+<input type="text" placeholder="e.g. John Doe" class="w-full h-11 px-md rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md">
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline-variant text-sm" data-icon="person">person</span>
+</div>
+</div>
+<!-- Phone -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Phone Number</label>
+<div class="relative">
+<input type="tel" placeholder="+1 (555) 000-0000" class="w-full h-11 px-md rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md">
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline-variant text-sm" data-icon="call">call</span>
+</div>
+</div>
+<!-- Age -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Age</label>
+<div class="relative">
+<input type="number" placeholder="Years" class="w-full h-11 px-md rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md">
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline-variant text-sm" data-icon="calendar_today">calendar_today</span>
+</div>
+</div>
+<!-- Gender -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Gender</label>
+<div class="relative">
+<select class="w-full h-11 px-md rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none transition-all text-body-md bg-white">
+<option value="" disabled="" selected="">Select Gender</option>
+<option value="male">Male</option>
+<option value="female">Female</option>
+<option value="other">Other</option>
+<option value="prefer_not_to_say">Prefer not to say</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Complaint -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Chief Complaint / Reason for Visit</label>
+<textarea rows="3" placeholder="Briefly describe the symptoms or reason for the walk-in..." class="w-full p-md rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md resize-none"></textarea>
+</div>
+<!-- Quick Selection Tags (Chips) -->
+<div class="flex flex-wrap gap-sm">
+<span class="px-sm py-1 rounded-full border border-outline-variant text-label-md hover:bg-primary-fixed hover:text-primary cursor-pointer transition-colors">Fever</span>
+<span class="px-sm py-1 rounded-full border border-outline-variant text-label-md hover:bg-primary-fixed hover:text-primary cursor-pointer transition-colors">Consultation</span>
+<span class="px-sm py-1 rounded-full border border-outline-variant text-label-md hover:bg-primary-fixed hover:text-primary cursor-pointer transition-colors">Emergency</span>
+<span class="px-sm py-1 rounded-full border border-outline-variant text-label-md hover:bg-primary-fixed hover:text-primary cursor-pointer transition-colors">Refill</span>
+</div>
+</div>
+<!-- Modal Footer / Actions -->
+<div class="px-lg py-md border-t border-outline-variant bg-surface-container-low flex items-center justify-between">
+<button onclick="document.getElementById('walkInModal').classList.add('hidden')" class="px-md py-base rounded-lg text-on-surface-variant font-bold hover:bg-surface-container transition-colors text-body-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="cancel">cancel</span>
+                    Cancel
+                </button>
+<div class="flex items-center gap-sm">
+<button class="px-md py-base rounded-lg bg-surface-container-high text-on-surface-variant font-bold hover:bg-surface-container-highest transition-colors text-body-md">
+                        Save Draft
+                    </button>
+<button id="generateTokenBtn" class="px-lg py-base rounded-lg bg-primary text-white font-bold hover:bg-primary-container transition-all text-body-md flex items-center gap-sm shadow-md active:scale-95">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+                        Generate Token
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        document.getElementById('generateTokenBtn').addEventListener('click', function() {
+            const btn = this;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Generating...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> Token Generated!';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-tertiary-container');
+                
+                setTimeout(() => {
+                    document.getElementById('walkInModal').classList.add('hidden');
+                    // Reset modal for next use
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.add('bg-primary');
+                        btn.classList.remove('bg-tertiary-container');
+                        btn.disabled = false;
+                    }, 500);
+                }, 1000);
+            }, 1500);
+        });
+
+        // Close modal when clicking background overlay
+        document.getElementById('walkInModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
+</body></html>

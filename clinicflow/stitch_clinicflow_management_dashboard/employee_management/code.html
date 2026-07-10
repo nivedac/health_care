@@ -1,0 +1,460 @@
+<!DOCTYPE html><html lang="en" class="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e0e3e5",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-fixed": "#001a41",
+                    "secondary": "#505f76",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#0070eb",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-container": "#fefcff",
+                    "surface-container-low": "#f2f4f6",
+                    "inverse-primary": "#adc6ff",
+                    "surface-bright": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "surface-container": "#eceef0",
+                    "on-error": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "on-primary-fixed-variant": "#004493",
+                    "on-secondary-fixed": "#0b1c30",
+                    "outline": "#717786",
+                    "on-tertiary-container": "#f5fff6",
+                    "secondary-container": "#d0e1fb",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#006947",
+                    "on-surface-variant": "#414755",
+                    "tertiary-container": "#00855b",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d8dadc",
+                    "inverse-surface": "#2d3133",
+                    "error-container": "#ffdad6",
+                    "primary": "#0058bc",
+                    "on-secondary-container": "#54647a",
+                    "primary-fixed-dim": "#adc6ff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-tint": "#005bc1",
+                    "outline-variant": "#c1c6d7",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#d8e2ff",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-fixed": "#002113",
+                    "background": "#f7f9fb",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-background": "#191c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "xl": "64px",
+                    "sm": "12px",
+                    "md": "24px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "margin-desktop": "32px",
+                    "xs": "4px",
+                    "lg": "40px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    }catch(_e){}</script><meta charset="utf-8"></head><body class="bg-background text-on-surface overflow-x-hidden">
+<!-- Desktop Side Navigation Rail -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] bg-surface-container dark:bg-surface-container-high shadow-sm flex flex-col h-full py-md px-base z-50 hidden md:flex">
+<div class="px-base mb-lg">
+<h1 class="font-title-lg text-title-lg text-primary dark:text-primary-fixed-dim tracking-tight">MedClinic Pro</h1>
+<p class="text-label-md text-on-surface-variant opacity-70">Reception Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<!-- Navigation Items Mapping -->
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">queue</span>
+<span class="font-body-md text-body-md">Queue</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Patients</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">person_add</span>
+<span class="font-body-md text-body-md">Walk-in</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="font-body-md text-body-md">Doctors</span>
+</a>
+<!-- Active State for Employees -->
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-secondary-container/50 dark:bg-secondary-container/20 active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-body-md text-body-md">Employees</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a href="#" class="flex items-center gap-sm p-base rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-[0.99] transition-transform duration-150">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-base pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed border border-primary/10">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly medical receptionist in a modern clinic office. She is wearing a soft blue uniform, has her hair tied back neatly, and is smiling warmly at the camera. The background shows a soft-focus clinical reception area with warm, diffused lighting and clean white surfaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNtLcmmx-n6HyUrw_rRngCr7O_NOrOZ6iqAzNHegZjfAHAp0yOGNLXYuVq_v_lrmSnnLteLeNdLiisrljxnPzI0MvGe36uPsIKjR_LWBcYxFw4geO0nGMRx7y77SwDCocXlN2pxIRUFxpqZW1Vwa4kFFj_t4wEpYOQjCqQGfr0JTatP5wSEjESNVRmxTzR8mUo0AADk48pDgZ_LQsMUxEvkRFWpjo3PCA6EF-dFto_1zMGG7LkieJ-agk6BxDsqFW35v2REE5lrA">
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-body-md text-on-surface truncate font-semibold">Sarah Jenkins</p>
+<p class="text-label-md text-on-surface-variant truncate">Reception Supervisor</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-[240px] min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-[64px] bg-surface dark:bg-surface-dim sticky top-0 z-40 border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-md flex-1">
+<h2 class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim">Clinic Management</h2>
+<!-- Search Bar -->
+<div class="relative w-full max-w-md hidden md:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-[40px] pr-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg font-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Search staff, roles, or ID..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-base">
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">schedule</span>
+</button>
+<button class="p-base rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">today</span>
+</button>
+</div>
+<div class="w-1 h-8 bg-outline-variant mx-xs"></div>
+<button class="flex items-center gap-sm bg-primary text-on-primary px-md py-sm rounded-lg font-body-md active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+<span>Add Employee</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-margin-desktop flex flex-col gap-md">
+<!-- Dashboard Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="bg-surface ambient-shadow rounded-xl p-md flex items-center gap-md border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Total Staff</p>
+<p class="font-title-lg text-title-lg text-on-surface">42</p>
+</div>
+</div>
+<div class="bg-surface ambient-shadow rounded-xl p-md flex items-center gap-md border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Active Now</p>
+<p class="font-title-lg text-title-lg text-on-surface">28</p>
+</div>
+</div>
+<div class="bg-surface ambient-shadow rounded-xl p-md flex items-center gap-md border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Doctors</p>
+<p class="font-title-lg text-title-lg text-on-surface">14</p>
+</div>
+</div>
+<div class="bg-surface ambient-shadow rounded-xl p-md flex items-center gap-md border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">On Leave</p>
+<p class="font-title-lg text-title-lg text-on-surface">3</p>
+</div>
+</div>
+</div>
+<!-- Employee Table Section -->
+<section class="bg-surface ambient-shadow rounded-xl border border-outline-variant/30 overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low/30">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Employee Directory</h3>
+<p class="text-body-md text-on-surface-variant">Manage credentials, status, and permissions for all staff.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-xs px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-md uppercase tracking-wider">
+<th class="px-md py-sm border-b border-outline-variant">Employee</th>
+<th class="px-md py-sm border-b border-outline-variant">Role</th>
+<th class="px-md py-sm border-b border-outline-variant">Phone Number</th>
+<th class="px-md py-sm border-b border-outline-variant">Status</th>
+<th class="px-md py-sm border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-on-surface">
+<!-- Table Row 1 -->
+<tr class="table-row-hover transition-colors border-b border-outline-variant/50">
+<td class="px-md py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary/10 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male doctor in his 40s, wearing a white clinical coat and a stethoscope. He has a professional and confident expression. The lighting is crisp and clean, reflecting a high-end medical facility with minimalist decor and glass partitions in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQDJkalqGgWHFXPQ1661A-5nHJyVBH0oKJEHuTDep6luG6EKlaAmyAgevkidgVeP2pxzmC6j1Of103qnPXXM0uZQbnx23_v3izXLPz2EbJ6DTP3v5D5IeFmR4MV4kN5YVORtcwIWc6xuuZb9HRebgeKTtmxKjyRMU81PzNueIegVumCjGnwSEUfdqHl0BkbaC3x5hDS043Ozbp0a82Ksgb58rSheIOZEQtZ23xdzplxbjoqaxSeK2kO-9FXPluJtatfIL18ZuzMw">
+</div>
+<div>
+<p class="font-semibold text-on-surface">Dr. Alexander Pierce</p>
+<p class="text-label-md text-on-surface-variant">EMP-2024-001</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md">
+<span class="px-sm py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-label-md font-medium uppercase tracking-tight">Senior Physician</span>
+</td>
+<td class="px-md py-md text-on-surface-variant">
+                                    (555) 123-4567
+                                </td>
+<td class="px-md py-md">
+<div class="flex items-center gap-xs text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-md font-semibold">Active</span>
+</div>
+</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-base">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Deactivate">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="table-row-hover transition-colors border-b border-outline-variant/50">
+<td class="px-md py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary/10 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a female nurse in her late 20s, wearing light teal scrubs. She looks friendly and approachable, with a subtle smile. The background is a soft-focus medical office with modern equipment and plenty of natural daylight, evoking a sense of trust and care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4zbn4E7PLl-jVLuzbzIvxX_F0K_KMMgr2DbP3isi_iYoc7lpf2V7dIQd4CSih_dh4OBb5wBAa6PGkPoiEdPis-D5Dl7kLiP9AR7D99otvlTl4DCLd5CCeH0HxkmJ8ekmxxrOuN2CTQWdBVTYqKAhQ_cXMYSNQYm8pyWTvWB21LFt3lE6ni_uSB3U2HyxLhs_jjQIzA-zAplzXoTG2xBe18Dv-E5CmL4HVz3Nc_ekDwRI-KPhXAPXNovkDc-7xdCYe5hjTdgu67w">
+</div>
+<div>
+<p class="font-semibold text-on-surface">Elena Rodriguez</p>
+<p class="text-label-md text-on-surface-variant">EMP-2024-012</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md">
+<span class="px-sm py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-label-md font-medium uppercase tracking-tight">Lead Nurse</span>
+</td>
+<td class="px-md py-md text-on-surface-variant">
+                                    (555) 987-6543
+                                </td>
+<td class="px-md py-md">
+<div class="flex items-center gap-xs text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-md font-semibold">Active</span>
+</div>
+</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-base">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Deactivate">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="table-row-hover transition-colors border-b border-outline-variant/50">
+<td class="px-md py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary/10 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male administrative worker in his 50s, wearing a smart casual grey sweater and glasses. He appears experienced and reliable. The clinical setting in the background is softly lit, featuring a clean aesthetic with light blue accents and a professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnLR1KMczgL_3YUHxhdCP9bcUx1bT3VO8pmDjCaC9ZF92tUNJmjqjWpGXdIEJ_2F9ICayy4hRlzyXHPj8khwRbI8d-T9EUlFPs-6tziORbyEzNQFiw2-N-Gu4L9LPXYBE-v0gB1hEqZ860UsS4SMlYXthm-C8qgvUD6o4hY3IfDaK9ybWid2Bn9K1paXl0VMVpiE4Qi22apgDKrdZjXnqZ52IF2JJcjQ880v4B2CMOV_oCskp8fJ-Xsc2eo1I5WrPcYgcdbvKOjw">
+</div>
+<div>
+<p class="font-semibold text-on-surface">Mark Stevenson</p>
+<p class="text-label-md text-on-surface-variant">EMP-2023-085</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md">
+<span class="px-sm py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-label-md font-medium uppercase tracking-tight">Admin Support</span>
+</td>
+<td class="px-md py-md text-on-surface-variant">
+                                    (555) 456-7890
+                                </td>
+<td class="px-md py-md">
+<div class="flex items-center gap-xs text-on-surface-variant opacity-60">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="text-label-md font-semibold">On Leave</span>
+</div>
+</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-base">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Deactivate">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="table-row-hover transition-colors border-b border-outline-variant/50">
+<td class="px-md py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary/10 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young female laboratory technician in her early 20s, wearing protective gear and a white lab coat. She is looking intently at her work but with a professional poise. The background is a modern clinical laboratory with stainless steel surfaces and high-tech medical testing equipment, bathed in a clean, daylight-style glow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlKTwCjB6fthtLaKkeYZdEyxsfMnVAxLW9HcMxTJ96ZV7RUo8KotVmGLuL1sWHh3nFWGRJDSB4p1JkrWLAuldK2o1KcLp7-Xlb7puwyak15qruRmLw76binC9r15X30De2EE8VWzMUfFDDQbKAr-ynAWjJxMGRpiSxDGCG0OmIVu1-12ivD9Bi9zlskTX1aj9R3ORsb5sdEeuYUBPjMhHYdLERTN6Q25Y4uGJYVcEdlsIHeLN3uXc5gdRwoaKhGxqKlT1uEtnmAQ">
+</div>
+<div>
+<p class="font-semibold text-on-surface">Chloe Kim</p>
+<p class="text-label-md text-on-surface-variant">EMP-2024-044</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md">
+<span class="px-sm py-1 rounded-full bg-tertiary-container text-on-tertiary text-label-md font-medium uppercase tracking-tight">Lab Technician</span>
+</td>
+<td class="px-md py-md text-on-surface-variant">
+                                    (555) 222-3333
+                                </td>
+<td class="px-md py-md">
+<div class="flex items-center gap-xs text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-md font-semibold">Active</span>
+</div>
+</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-base">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Deactivate">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md flex items-center justify-between border-t border-outline-variant bg-surface-container-low/20">
+<p class="text-label-md text-on-surface-variant">Showing 1 to 4 of 42 employees</p>
+<div class="flex gap-xs">
+<button class="p-xs rounded border border-outline-variant hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-label-md">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant hover:bg-surface-container font-label-md text-on-surface-variant">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant hover:bg-surface-container font-label-md text-on-surface-variant">3</button>
+<button class="p-xs rounded border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Floating Action Button (Mobile) -->
+<button class="md:hidden fixed right-margin-mobile bottom-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<!-- Footer Info -->
+<footer class="mt-auto py-md px-margin-desktop text-center">
+<p class="text-label-md text-on-surface-variant opacity-60">© 2024 MedClinic Pro. All staff activities are logged for security purposes.</p>
+</footer>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Simple search highlighting/filtering logic simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        const rows = document.querySelectorAll('tbody tr');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(term)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Row interactions
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                // In a real app, this might navigate to details
+                console.log('Row clicked: ' + row.querySelector('.font-semibold').innerText);
+            });
+        });
+    </script>
+</body></html>

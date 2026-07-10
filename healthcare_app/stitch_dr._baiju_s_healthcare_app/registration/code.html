@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Registration - Dr. Baiju's Healthcare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#191c1d",
+                      "secondary": "#56615c",
+                      "background": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#95d5a8",
+                      "on-surface": "#191c1d",
+                      "on-secondary-fixed": "#141e1a",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#3f4941",
+                      "on-secondary-fixed-variant": "#3f4945",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#7ed99e",
+                      "secondary-container": "#dae5df",
+                      "surface-container-low": "#f3f4f5",
+                      "primary-container": "#268451",
+                      "on-primary-fixed": "#00210f",
+                      "outline-variant": "#becabe",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-container": "#5c6762",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-fixed-variant": "#00522d",
+                      "tertiary-container": "#43815b",
+                      "surface-dim": "#d9dadb",
+                      "inverse-primary": "#7ed99e",
+                      "surface-tint": "#006d3d",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#0e5130",
+                      "outline": "#6f7a70",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#9af6b8",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-container": "#edeeef",
+                      "on-tertiary-container": "#f6fff5",
+                      "primary": "#006a3b",
+                      "inverse-surface": "#2e3132",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e1e3e4",
+                      "on-tertiary-fixed": "#00210f",
+                      "on-primary-container": "#f6fff4",
+                      "surface-container-highest": "#e1e3e4",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#296743",
+                      "secondary-fixed": "#dae5df",
+                      "tertiary-fixed": "#b0f1c3",
+                      "secondary-fixed-dim": "#bec9c3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "container-margin": "24px",
+                      "stack-md": "16px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Smooth interactions */
+        .interaction-pulse:active {
+            transform: scale(0.98);
+        }
+        
+        /* Input focus transitions */
+        .input-field {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-field:focus-within {
+            border-color: #006a3b;
+            box-shadow: 0 0 0 4px rgba(0, 106, 59, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-full font-body-md antialiased md:bg-surface-container-low flex flex-col items-center">
+<!-- Note: TopAppBar and BottomNavBar are suppressed as this is a linear/transactional registration flow -->
+<main class="w-full max-w-[600px] md:my-10 md:rounded-[24px] md:shadow-[0_20px_40px_rgba(0,0,0,0.06)] md:bg-surface-container-lowest flex-grow flex flex-col relative overflow-hidden">
+<!-- Header Image Area -->
+<div class="h-48 md:h-64 w-full relative bg-primary-container overflow-hidden shrink-0">
+<div class="absolute inset-0 bg-cover bg-center opacity-90" data-alt="A clean, modern healthcare illustration featuring abstract geometric shapes in shades of emerald green and soft white. The scene evokes a sense of calm, precision, and wellness, characteristic of high-end minimal UI design. Soft lighting highlights gentle curves and smooth surfaces, creating a sanctuary-like atmosphere suitable for a premium medical application." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCcs5g5M8NXkqvrp3rcuoxRAXhguiS5bLoDeo88ERxyrkldPaSxr_L6xNbZzxHZ5dFCndQdk3H6xK0irR7wpoMpr7B3VmY7Zik2qrK5O7rL_dyXqo0gkFfzp37LG_WWGSrxbcBGYu98rvdJXJL8-Q6--mMt1oER72hlis8lF1H9Jwb63JN-dhVM6KyzWHHfXocUw2RZaxZLlhoMJvz6k2HK8SvjF7ossl_lPY6AC14MEAQt-TMGOen8sSX4EGDLd4QqNdo4xv4mxg')">
+</div>
+<!-- Gradient overlay for text readability if needed later, and to blend with content -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+</div>
+<!-- Content Area -->
+<div class="px-container-margin pt-stack-md pb-container-margin flex-grow flex flex-col bg-surface-container-lowest rounded-t-[24px] -mt-6 relative z-10">
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-unit">Patient Registration</h1>
+<p class="font-body-md text-body-md text-secondary">Please provide your details to complete setup.</p>
+</div>
+<!-- Form -->
+<form class="flex-grow flex flex-col gap-stack-md">
+<!-- Full Name -->
+<div class="input-field relative rounded-xl border border-outline-variant bg-surface-container-lowest p-unit flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary ml-2">person</span>
+<div class="flex flex-col ml-3 w-full">
+<label class="font-label-sm text-label-sm text-secondary" for="fullName">Full Name</label>
+<input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface placeholder-outline-variant" id="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Age -->
+<div class="input-field relative rounded-xl border border-outline-variant bg-surface-container-lowest p-unit flex items-center">
+<div class="flex flex-col ml-3 w-full">
+<label class="font-label-sm text-label-sm text-secondary" for="age">Age</label>
+<input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface placeholder-outline-variant" id="age" placeholder="e.g. 34" required="" type="number"/>
+</div>
+</div>
+<!-- Gender -->
+<div class="input-field relative rounded-xl border border-outline-variant bg-surface-container-lowest p-unit flex items-center pr-2">
+<div class="flex flex-col ml-3 w-full">
+<label class="font-label-sm text-label-sm text-secondary" for="gender">Gender</label>
+<select class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface appearance-none cursor-pointer" id="gender" required="">
+<option disabled="" selected="" value="">Select</option>
+<option value="female">Female</option>
+<option value="male">Male</option>
+<option value="other">Other</option>
+<option value="prefer_not_to_say">Prefer not to say</option>
+</select>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined text-secondary pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<!-- Blood Group -->
+<div class="input-field relative rounded-xl border border-outline-variant bg-surface-container-lowest p-unit flex items-center pr-2">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary ml-2">bloodtype</span>
+<div class="flex flex-col ml-3 w-full">
+<label class="font-label-sm text-label-sm text-secondary" for="bloodGroup">Blood Group</label>
+<select class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface appearance-none cursor-pointer" id="bloodGroup" required="">
+<option disabled="" selected="" value="">Select Group</option>
+<option value="A+">A+</option>
+<option value="A-">A-</option>
+<option value="B+">B+</option>
+<option value="B-">B-</option>
+<option value="O+">O+</option>
+<option value="O-">O-</option>
+<option value="AB+">AB+</option>
+<option value="AB-">AB-</option>
+</select>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined text-secondary pointer-events-none">arrow_drop_down</span>
+</div>
+<!-- Address (Optional) -->
+<div class="input-field relative rounded-xl border border-outline-variant bg-surface-container-lowest p-unit flex items-start mt-2">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary ml-2 mt-2">home</span>
+<div class="flex flex-col ml-3 w-full">
+<label class="font-label-sm text-label-sm text-secondary flex justify-between" for="address">Address <span class="text-outline">Optional</span></label>
+<textarea class="w-full bg-transparent border-none p-0 mt-1 focus:ring-0 font-body-md text-body-md text-on-surface placeholder-outline-variant resize-none" id="address" placeholder="Enter your full address" rows="3"></textarea>
+</div>
+</div>
+<!-- Spacer to push button to bottom on tall screens -->
+<div class="flex-grow min-h-[32px]"></div>
+<!-- Submit Button -->
+<button class="w-full bg-primary hover:opacity-90 text-on-primary font-title-md text-title-md py-4 rounded-full shadow-[0_4px_14px_rgba(0,106,59,0.25)] transition-all interaction-pulse mt-auto flex justify-center items-center gap-2" type="submit">
+                    Save Details
+                    <span aria-hidden="true" class="material-symbols-outlined">check_circle</span>
+</button>
+</form>
+</div>
+</main>
+</body></html>
