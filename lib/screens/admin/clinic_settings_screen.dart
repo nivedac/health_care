@@ -78,7 +78,7 @@ class _ClinicSettingsScreenState extends State<ClinicSettingsScreen> {
     super.dispose();
   }
 
-  void _saveSettings() {
+  Future<void> _saveSettings() async {
     if (_formKey.currentState!.validate()) {
       final provider = context.read<SettingsProvider>();
       
@@ -96,12 +96,11 @@ class _ClinicSettingsScreenState extends State<ClinicSettingsScreen> {
         tokenPrefix: _tokenPrefixController.text.isNotEmpty ? _tokenPrefixController.text : null,
       );
 
-      provider.updateSettings(updatedSettings).then((_) {
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Settings saved successfully!')),
-        );
-      });
+      await provider.updateSettings(updatedSettings);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Settings saved successfully!')),
+      );
     }
   }
 

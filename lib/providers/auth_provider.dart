@@ -7,8 +7,6 @@ class AuthProvider extends ChangeNotifier {
   final AuthRepository _repository = AuthRepository();
   UserModel? _currentUser;
   bool _isLoading = false;
-  String? _pendingVerificationId;
-  String? _phoneNumber;
 
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
