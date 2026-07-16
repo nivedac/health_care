@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/queue_provider.dart';
-import '../../providers/appointment_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../models/queue_model.dart';
 
 class LiveQueueScreen extends StatelessWidget {
@@ -13,26 +13,26 @@ class LiveQueueScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
-    // In a real scenario, we'd get the current user's appointment and matching queue.
-    // We'll just mock this using the providers for now.
-    final appointmentProvider = Provider.of<AppointmentProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     final queueProvider = Provider.of<QueueProvider>(context);
     
-    // For mocking purposes, assume the first appointment and first queue are relevant
-    final appointment = appointmentProvider.appointments.isNotEmpty 
-        ? appointmentProvider.appointments.first 
-        : null;
-    final queue = queueProvider.liveQueue ?? 
-        QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
+    final userPhone = authProvider.currentUser?.phoneNumber ?? '';
+    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
 
-    final currentToken = int.tryParse(queue.currentToken?.tokenNumber ?? '') ?? 18;
-    final yourToken = appointment?.tokenNumber ?? 24;
-    final patientsAhead = (yourToken - currentToken) > 0 ? (yourToken - currentToken) : 6;
-    final estWait = patientsAhead * 10; // assume 10 min avg wait
+    final myToken = queue.activeTokens.cast<dynamic>().firstWhere(
+      (t) => t.patientPhone == userPhone && (t.status.name == 'waiting' || t.status.name == 'booked' || t.status.name == 'arrived'),
+      orElse: () => null,
+    );
+
+    final currentToken = queue.currentToken?.tokenNumber ?? 0;
+    final yourToken = myToken?.tokenNumber ?? 0;
+    
+    final estWait = myToken != null ? queueProvider.getEstimatedWaitingTime(myToken.id) : 0;
+    final patientsAhead = estWait ~/ QueueProvider.averageConsultationTime;
     
     // Calculate progress for circular indicator
     // E.g., if token is 24, and current is 18, maybe progress is 18/24
-    final progress = yourToken > 0 ? (currentToken / yourToken).clamp(0.0, 1.0) : 0.0;
+    final progress = yourToken > 0 && currentToken <= yourToken ? (currentToken / yourToken).clamp(0.0, 1.0) : 0.0;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -114,13 +114,13 @@ class LiveQueueScreen extends StatelessWidget {
                                 children: [
                                   Text('CURRENT TOKEN', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
                                   const SizedBox(height: 4),
-                                  Text('$currentToken', style: theme.textTheme.displayMedium?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.bold)),
+                                  Text('${currentToken > 0 ? currentToken : "-"}', style: theme.textTheme.displayMedium?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 8),
                                   Container(height: 1, width: 64, color: colorScheme.surfaceContainerHighest),
                                   const SizedBox(height: 8),
                                   Text('YOUR TOKEN', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
                                   const SizedBox(height: 4),
-                                  Text('$yourToken', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                  Text('${yourToken > 0 ? yourToken : "-"}', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                                 ],
                               ),
                             ),
@@ -246,8 +246,11 @@ class LiveQueueScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextButton(
-                    onPressed: () {},
-                    child: Text('Cancel Booking', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.error)),
+                    onPressed: myToken != null ? () {
+                      queueProvider.cancelAppointment(myToken.id);
+                      context.pop();
+                    } : null,
+                    child: Text('Cancel Booking', style: theme.textTheme.bodyMedium?.copyWith(color: myToken != null ? colorScheme.error : colorScheme.outlineVariant)),
                   ),
                 ],
               ),

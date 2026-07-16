@@ -1,23 +1,43 @@
 import '../models/doctor_model.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/doctor_model.dart';
+
 class DoctorRepository {
-  final List<DoctorModel> _mockDoctors = [
-    const DoctorModel(id: 'd1', userId: 'u3', name: 'Dr. Baiju', specialization: 'General Physician'),
-    const DoctorModel(id: 'd2', userId: 'u6', name: 'Dr. Smith', specialization: 'Cardiologist'),
-    const DoctorModel(id: 'd3', userId: 'u7', name: 'Dr. Richards', specialization: 'Dermatologist'),
-  ];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String _collection = 'doctors';
 
   Future<List<DoctorModel>> getDoctors() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return _mockDoctors;
+    final snapshot = await _firestore.collection(_collection).get();
+    return snapshot.docs.map((doc) => DoctorModel.fromJson({...doc.data(), 'id': doc.id})).toList();
   }
 
   Future<DoctorModel?> getDoctorById(String id) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    try {
-      return _mockDoctors.firstWhere((d) => d.id == id);
-    } catch (e) {
-      return null;
+    final doc = await _firestore.collection(_collection).doc(id).get();
+    if (doc.exists) {
+      return DoctorModel.fromJson({...doc.data()!, 'id': doc.id});
     }
+    return null;
+  }
+
+  Future<DoctorModel> addDoctor(DoctorModel doctor) async {
+    final docRef = await _firestore.collection(_collection).add(doctor.toJson());
+    return doctor.copyWith(id: docRef.id);
+  }
+
+  Future<DoctorModel> updateDoctor(DoctorModel doctor) async {
+    await _firestore.collection(_collection).doc(doctor.id).update(doctor.toJson());
+    return doctor;
+  }
+
+  Future<DoctorModel> deactivateDoctor(String id) async {
+    await _firestore.collection(_collection).doc(id).update({'isAvailable': false});
+    final doc = await _firestore.collection(_collection).doc(id).get();
+    return DoctorModel.fromJson({...doc.data()!, 'id': doc.id});
+  }
+
+  Future<void> deleteDoctor(String id) async {
+    await _firestore.collection(_collection).doc(id).delete();
   }
 }
+

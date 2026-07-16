@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'reception_layout.dart';
+import '../../widgets/dashboard_layout.dart';
 
 class PatientSearchScreen extends StatelessWidget {
   const PatientSearchScreen({super.key});
@@ -9,7 +9,7 @@ class PatientSearchScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
-    return ReceptionLayout(
+    return DashboardLayout(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(

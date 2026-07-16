@@ -1,34 +1,55 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/queue_model.dart';
 import '../models/token_model.dart';
 
 class QueueRepository {
-  QueueModel _mockQueue = QueueModel(
-    id: 'q1',
-    doctorId: 'd1',
-    date: DateTime.now(),
-    activeTokens: [
-      TokenModel(id: 't1', appointmentId: 'a1', tokenNumber: 'A01', issuedAt: DateTime.now()),
-      TokenModel(id: 't2', appointmentId: 'a3', tokenNumber: 'A02', issuedAt: DateTime.now().add(const Duration(minutes: 5))),
-    ],
-    currentToken: TokenModel(id: 't0', appointmentId: 'a0', tokenNumber: 'A00', issuedAt: DateTime.now().subtract(const Duration(minutes: 10))),
-  );
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String _collection = 'queue';
 
   Future<QueueModel> getLiveQueue(String doctorId) async {
-    await Future.delayed(const Duration(seconds: 1));
-    // For mock, returning the same queue regardless of doctorId
-    return _mockQueue;
+    // Usually one active queue per doctor per day.
+    // For simplicity, we query by doctorId.
+    final snapshot = await _firestore.collection(_collection)
+        .where('doctorId', isEqualTo: doctorId)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final doc = snapshot.docs.first;
+      return QueueModel.fromJson({...doc.data(), 'id': doc.id});
+    } else {
+      // Create a default empty queue if not found
+      final newQueue = QueueModel(
+        id: '',
+        doctorId: doctorId,
+        date: DateTime.now(),
+        activeTokens: const [],
+        currentToken: null,
+      );
+      final docRef = await _firestore.collection(_collection).add(newQueue.toJson());
+      return newQueue.copyWith(id: docRef.id);
+    }
   }
 
   Future<QueueModel> nextPatient(String queueId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (_mockQueue.activeTokens.isNotEmpty) {
-      final nextToken = _mockQueue.activeTokens.first;
-      final remainingTokens = _mockQueue.activeTokens.sublist(1);
-      _mockQueue = _mockQueue.copyWith(
-        currentToken: nextToken,
-        activeTokens: remainingTokens,
-      );
-    }
-    return _mockQueue;
+    final docRef = _firestore.collection(_collection).doc(queueId);
+    return await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(docRef);
+      if (!snapshot.exists) throw Exception('Queue not found');
+
+      final queue = QueueModel.fromJson({...snapshot.data()!, 'id': snapshot.id});
+      if (queue.activeTokens.isNotEmpty) {
+        final nextToken = queue.activeTokens.first;
+        final remainingTokens = queue.activeTokens.sublist(1);
+        final updatedQueue = queue.copyWith(
+          currentToken: nextToken,
+          activeTokens: remainingTokens,
+        );
+        transaction.update(docRef, updatedQueue.toJson());
+        return updatedQueue;
+      }
+      return queue;
+    });
   }
 }
+

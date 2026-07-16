@@ -3,12 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/appointment_provider.dart';
+import '../../providers/queue_provider.dart';
 import '../../models/appointment_model.dart';
 
 class BookTokenScreen extends StatelessWidget {
   const BookTokenScreen({super.key});
 
-  void _showConfirmationDialog(BuildContext context, AppointmentProvider appointmentProvider, String userId) {
+  void _showConfirmationDialog(BuildContext context, AppointmentProvider appointmentProvider, QueueProvider queueProvider, String userId, String userName, String userPhone) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -29,12 +30,15 @@ class BookTokenScreen extends StatelessWidget {
                 patientId: userId,
                 doctorId: 'mock_doctor_baiju',
                 appointmentDate: DateTime.now(),
-                tokenNumber: 24,
+                tokenNumber: 24, // Fallback, but we use queue provider for actual queueing
                 estimatedTime: DateTime.now().add(const Duration(minutes: 45)),
                 status: 'scheduled',
               );
               
               await appointmentProvider.bookAppointment(newAppointment);
+              
+              // Also add to queue workflow
+              queueProvider.generateToken(patientName: userName, patientPhone: userPhone, patientId: userId);
               
               if (context.mounted) {
                 context.push('/booking-success', extra: newAppointment);
@@ -53,6 +57,7 @@ class BookTokenScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final authProvider = Provider.of<AuthProvider>(context);
     final appointmentProvider = Provider.of<AppointmentProvider>(context, listen: false);
+    final queueProvider = Provider.of<QueueProvider>(context, listen: false);
     final user = authProvider.currentUser;
 
     return Scaffold(
@@ -315,7 +320,7 @@ class BookTokenScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
                     ),
-                    onPressed: () => _showConfirmationDialog(context, appointmentProvider, user?.id ?? 'mock_user_id'),
+                    onPressed: () => _showConfirmationDialog(context, appointmentProvider, queueProvider, user?.id ?? 'mock_user_id', user?.name ?? 'Guest', user?.phoneNumber ?? ''),
                     label: const Text('Book Now'),
                     iconAlignment: IconAlignment.end,
                     icon: const Icon(Icons.arrow_forward, size: 20),

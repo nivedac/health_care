@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme.dart';
-import 'reception_layout.dart';
+import '../../widgets/dashboard_layout.dart';
 import 'walk_in_dialog.dart';
 import '../../providers/queue_provider.dart';
+import '../../providers/notification_provider.dart';
 import '../../models/queue_model.dart';
+import '../../models/token_model.dart';
+import 'package:intl/intl.dart';
 
 class ReceptionDashboardScreen extends StatelessWidget {
   const ReceptionDashboardScreen({super.key});
@@ -13,8 +16,16 @@ class ReceptionDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final queueProvider = Provider.of<QueueProvider>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     
-    return ReceptionLayout(
+    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
+    final completedCount = queue.completedCount;
+    final waitingCount = queue.waitingCount;
+    final cancelledCount = queue.cancelledCount;
+    final currentToken = queue.currentToken;
+    
+    return DashboardLayout(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
         child: Column(
@@ -28,11 +39,11 @@ class ReceptionDashboardScreen extends StatelessWidget {
                   flex: 8,
                   child: Row(
                     children: [
-                      Expanded(child: _buildStatCard(context, 'Completed', Icons.check_circle, '42', '+12% from avg', colorScheme.tertiary)),
+                      Expanded(child: _buildStatCard(context, 'Completed', Icons.check_circle, '$completedCount', 'Today', colorScheme.tertiary)),
                       const SizedBox(width: 24),
-                      Expanded(child: _buildStatCard(context, 'Waiting', Icons.hourglass_empty, '08', 'Avg. wait: 14 mins', colorScheme.primary)),
+                      Expanded(child: _buildStatCard(context, 'Waiting', Icons.hourglass_empty, '${waitingCount < 10 ? "0" : ""}$waitingCount', 'Est avg. wait: 8 mins', colorScheme.primary)),
                       const SizedBox(width: 24),
-                      Expanded(child: _buildStatCard(context, 'Cancelled', Icons.cancel, '03', 'Rate: 2.4%', colorScheme.error)),
+                      Expanded(child: _buildStatCard(context, 'Cancelled', Icons.cancel, '${cancelledCount < 10 ? "0" : ""}$cancelledCount', 'Today', colorScheme.error)),
                     ],
                   ),
                 ),
@@ -51,9 +62,9 @@ class ReceptionDashboardScreen extends StatelessWidget {
                       children: [
                         Text('CURRENTLY SERVING', style: theme.textTheme.labelMedium?.copyWith(color: colorScheme.onPrimary.withValues(alpha: 0.8), letterSpacing: 2)),
                         const SizedBox(height: 16),
-                        Text('B-14', style: theme.textTheme.displayLarge?.copyWith(color: colorScheme.onPrimary, fontWeight: FontWeight.bold)),
+                        Text(currentToken != null ? '${currentToken.tokenNumber}' : '-', style: theme.textTheme.displayLarge?.copyWith(color: colorScheme.onPrimary, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
-                        Text('Mr. Jonathan Doe', style: theme.textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary)),
+                        Text(currentToken != null ? (currentToken.patientName ?? 'Unknown') : 'No Patient', style: theme.textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary)),
                         const SizedBox(height: 16),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -61,7 +72,7 @@ class ReceptionDashboardScreen extends StatelessWidget {
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(32),
                           ),
-                          child: Text('Room 04 • Dr. Aris Thorne', style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onPrimary)),
+                          child: Text('Room 03 • Dr. Baiju', style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onPrimary)),
                         ),
                       ],
                     ),
@@ -145,9 +156,32 @@ class ReceptionDashboardScreen extends StatelessWidget {
                   ),
                   
                   // Table Rows
-                  _buildTableRow(context, 'B-15', 'RS', 'Rebecca Smith', 'General Consultation', '+1 234-567-8901', '10:15 AM', 'Waiting (12m)', true),
-                  _buildTableRow(context, 'B-16', 'MW', 'Marcus Wright', 'Pediatrics • Follow-up', '+1 345-678-9012', '10:28 AM', 'Waiting (4m)', true),
-                  _buildTableRow(context, 'B-17', 'EL', 'Elena Lopez', 'Laboratory • Blood Test', '+1 456-789-0123', '10:30 AM', 'Scheduled', false),
+                  if (queue.activeTokens.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Center(child: Text('No patients in queue yet', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant))),
+                    ),
+                  ...queue.activeTokens.map((token) {
+                    final isWaiting = token.status == QueueStatus.waiting || token.status == QueueStatus.arrived;
+                    final initials = token.patientName?.isNotEmpty == true ? token.patientName!.substring(0, 1).toUpperCase() : '?';
+                    return _buildTableRow(
+                      context: context,
+                      token: '${token.tokenNumber}',
+                      initials: initials,
+                      name: token.patientName ?? 'Unknown',
+                      dept: 'General Consultation',
+                      phone: token.patientPhone ?? '-',
+                      arrival: DateFormat('hh:mm a').format(token.issuedAt),
+                      status: token.status.name.toUpperCase(),
+                      isWaiting: isWaiting,
+                      onCallNext: () => queueProvider.callNextPatient(notificationProvider),
+                      onRecall: () => queueProvider.recallPatient(token.id, notificationProvider),
+                      onSkip: () => queueProvider.skipPatient(token.id),
+                      onCancel: () => queueProvider.cancelAppointment(token.id),
+                      onComplete: () => queueProvider.completeConsultation(token.id),
+                      onArrive: () => queueProvider.markPatientArrived(token.id),
+                    );
+                  }),
                   
                   // Footer
                   Container(
@@ -160,7 +194,7 @@ class ReceptionDashboardScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Showing 1-3 of 8 patients in queue', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+                        Text('Showing ${queue.activeTokens.length} patients in queue', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
                         Row(
                           children: [
                             IconButton(icon: const Icon(Icons.chevron_left), onPressed: null, style: IconButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: colorScheme.outlineVariant)))),
@@ -220,7 +254,23 @@ class ReceptionDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTableRow(BuildContext context, String token, String initials, String name, String dept, String phone, String arrival, String status, bool isWaiting) {
+  Widget _buildTableRow({
+    required BuildContext context, 
+    required String token, 
+    required String initials, 
+    required String name, 
+    required String dept, 
+    required String phone, 
+    required String arrival, 
+    required String status, 
+    required bool isWaiting,
+    required VoidCallback onCallNext,
+    required VoidCallback onRecall,
+    required VoidCallback onSkip,
+    required VoidCallback onCancel,
+    required VoidCallback onComplete,
+    required VoidCallback onArrive,
+  }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
@@ -278,11 +328,18 @@ class ReceptionDashboardScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(icon: Icon(Icons.volume_up, color: colorScheme.primary), onPressed: () {}, tooltip: 'Call Next'),
-                IconButton(icon: Icon(Icons.replay, color: colorScheme.secondary), onPressed: () {}, tooltip: 'Recall'),
-                IconButton(icon: Icon(Icons.skip_next, color: colorScheme.onSurfaceVariant), onPressed: () {}, tooltip: 'Skip'),
+                if (status == 'WAITING' || status == 'ARRIVED') 
+                  IconButton(icon: Icon(Icons.volume_up, color: colorScheme.primary), onPressed: onCallNext, tooltip: 'Call Next'),
+                if (status == 'CALLED')
+                  IconButton(icon: Icon(Icons.replay, color: colorScheme.secondary), onPressed: onRecall, tooltip: 'Recall'),
+                if (status == 'WAITING' || status == 'ARRIVED')
+                  IconButton(icon: Icon(Icons.skip_next, color: colorScheme.onSurfaceVariant), onPressed: onSkip, tooltip: 'Skip'),
+                if (status == 'INCONSULTATION')
+                  IconButton(icon: Icon(Icons.check_circle, color: colorScheme.tertiary), onPressed: onComplete, tooltip: 'Complete'),
+                if (status == 'BOOKED')
+                  IconButton(icon: Icon(Icons.person_add, color: colorScheme.primary), onPressed: onArrive, tooltip: 'Mark Arrived'),
                 const SizedBox(width: 8),
-                IconButton(icon: Icon(Icons.delete_outline, color: colorScheme.error), onPressed: () {}, tooltip: 'Cancel'),
+                IconButton(icon: Icon(Icons.delete_outline, color: colorScheme.error), onPressed: onCancel, tooltip: 'Cancel'),
               ],
             ),
           ),

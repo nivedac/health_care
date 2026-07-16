@@ -8,6 +8,10 @@ class QueueModel extends Equatable {
   final List<TokenModel> activeTokens;
   final TokenModel? currentToken;
 
+  int get waitingCount => activeTokens.where((t) => t.status == QueueStatus.waiting || t.status == QueueStatus.arrived).length;
+  int get completedCount => activeTokens.where((t) => t.status == QueueStatus.completed).length;
+  int get cancelledCount => activeTokens.where((t) => t.status == QueueStatus.cancelled || t.status == QueueStatus.skipped).length;
+
   const QueueModel({
     required this.id,
     required this.doctorId,

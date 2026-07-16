@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme.dart';
-import 'walk_in_dialog.dart';
+import 'package:provider/provider.dart';
+import '../core/theme.dart';
+import '../providers/auth_provider.dart';
+import '../screens/reception/walk_in_dialog.dart';
 
-class ReceptionLayout extends StatelessWidget {
+class DashboardLayout extends StatelessWidget {
   final Widget child;
 
-  const ReceptionLayout({super.key, required this.child});
+  const DashboardLayout({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,11 @@ class ReceptionLayout extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final currentPath = GoRouterState.of(context).uri.toString();
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.currentUser;
+    final isAdmin = user?.role == 'admin';
+    
+    final roleName = isAdmin ? 'Admin Portal' : 'Reception Portal';
 
     return Container(
       width: 240,
@@ -57,7 +64,7 @@ class ReceptionLayout extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Reception Portal',
+                  roleName,
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                   ),
@@ -73,62 +80,80 @@ class ReceptionLayout extends StatelessWidget {
                   context,
                   title: 'Dashboard',
                   icon: Icons.dashboard_outlined,
-                  path: '/reception',
-                  isActive: currentPath == '/reception',
+                  path: isAdmin ? '/admin' : '/reception',
+                  isActive: currentPath == (isAdmin ? '/admin' : '/reception'),
                 ),
-                _buildNavItem(
-                  context,
-                  title: 'Queue',
-                  icon: Icons.queue_outlined,
-                  path: '/reception/queue',
-                  isActive: currentPath == '/reception/queue',
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Patients',
-                  icon: Icons.group_outlined,
-                  path: '/reception/search-patients',
-                  isActive: currentPath == '/reception/search-patients',
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Walk-in',
-                  icon: Icons.person_add_outlined,
-                  path: '/reception/walk-in',
-                  isActive: currentPath == '/reception/walk-in',
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Doctors',
-                  icon: Icons.medical_services_outlined,
-                  path: '#',
-                  isActive: false,
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Employees',
-                  icon: Icons.badge_outlined,
-                  path: '#',
-                  isActive: false,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                  child: Divider(),
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Reports',
-                  icon: Icons.assessment_outlined,
-                  path: '#',
-                  isActive: false,
-                ),
-                _buildNavItem(
-                  context,
-                  title: 'Settings',
-                  icon: Icons.settings_outlined,
-                  path: '#',
-                  isActive: false,
-                ),
+                if (!isAdmin) ...[
+                  _buildNavItem(
+                    context,
+                    title: 'Queue',
+                    icon: Icons.queue_outlined,
+                    path: '/reception/queue',
+                    isActive: currentPath == '/reception/queue',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Patients',
+                    icon: Icons.group_outlined,
+                    path: '/reception/search-patients',
+                    isActive: currentPath == '/reception/search-patients',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Walk-in',
+                    icon: Icons.person_add_outlined,
+                    path: '/reception/walk-in',
+                    isActive: currentPath == '/reception/walk-in',
+                  ),
+                ],
+                if (isAdmin) ...[
+                  _buildNavItem(
+                    context,
+                    title: 'Employees',
+                    icon: Icons.badge_outlined,
+                    path: '/admin/employees',
+                    isActive: currentPath == '/admin/employees',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Doctors',
+                    icon: Icons.medical_services_outlined,
+                    path: '/admin/doctors',
+                    isActive: currentPath == '/admin/doctors',
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    child: Divider(),
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Reports',
+                    icon: Icons.assessment_outlined,
+                    path: '/admin/reports',
+                    isActive: currentPath == '/admin/reports',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Settings',
+                    icon: Icons.settings_outlined,
+                    path: '/admin/settings',
+                    isActive: currentPath == '/admin/settings',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Holidays',
+                    icon: Icons.calendar_today_outlined,
+                    path: '/admin/holidays',
+                    isActive: currentPath == '/admin/holidays',
+                  ),
+                  _buildNavItem(
+                    context,
+                    title: 'Notifications',
+                    icon: Icons.notifications_active_outlined,
+                    path: '/admin/notifications',
+                    isActive: currentPath == '/admin/notifications',
+                  ),
+                ],
               ],
             ),
           ),
@@ -149,7 +174,7 @@ class ReceptionLayout extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sarah Johnson',
+                        user?.name ?? 'Unknown',
                         style: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: colorScheme.onSurface,
@@ -158,7 +183,7 @@ class ReceptionLayout extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        'Lead Receptionist',
+                        isAdmin ? 'Administrator' : 'Receptionist',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -167,6 +192,13 @@ class ReceptionLayout extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout, size: 20),
+                  onPressed: () {
+                    authProvider.logout();
+                    context.go('/login');
+                  },
                 ),
               ],
             ),

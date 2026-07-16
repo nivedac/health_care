@@ -7,6 +7,9 @@ class EmployeeModel extends Equatable {
   final String position; // 'Receptionist', 'Admin', 'Nurse'
   final String department;
   final String? profileImageUrl;
+  final String? phone;
+  final String? email;
+  final bool isActive;
 
   const EmployeeModel({
     required this.id,
@@ -15,6 +18,9 @@ class EmployeeModel extends Equatable {
     required this.position,
     required this.department,
     this.profileImageUrl,
+    this.phone,
+    this.email,
+    this.isActive = true,
   });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +31,9 @@ class EmployeeModel extends Equatable {
       position: json['position'] as String,
       department: json['department'] as String,
       profileImageUrl: json['profileImageUrl'] as String?,
+      phone: json['phone'] as String?,
+      email: json['email'] as String?,
+      isActive: json['isActive'] as bool? ?? true,
     );
   }
 
@@ -36,6 +45,9 @@ class EmployeeModel extends Equatable {
       'position': position,
       'department': department,
       'profileImageUrl': profileImageUrl,
+      'phone': phone,
+      'email': email,
+      'isActive': isActive,
     };
   }
 
@@ -46,6 +58,9 @@ class EmployeeModel extends Equatable {
     String? position,
     String? department,
     String? profileImageUrl,
+    String? phone,
+    String? email,
+    bool? isActive,
   }) {
     return EmployeeModel(
       id: id ?? this.id,
@@ -54,9 +69,12 @@ class EmployeeModel extends Equatable {
       position: position ?? this.position,
       department: department ?? this.department,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      isActive: isActive ?? this.isActive,
     );
   }
 
   @override
-  List<Object?> get props => [id, userId, name, position, department, profileImageUrl];
+  List<Object?> get props => [id, userId, name, position, department, profileImageUrl, phone, email, isActive];
 }

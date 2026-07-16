@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/queue_provider.dart';
 import '../../widgets/navigation.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,8 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // In a real app, you would swap out the body or navigate.
-    // We only have the home flow defined for now.
+    // Navigation logic here
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QueueProvider>(context, listen: false).fetchLiveQueue('dr_baiju');
+    });
   }
 
   @override
@@ -27,7 +35,24 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final authProvider = Provider.of<AuthProvider>(context);
+    final queueProvider = Provider.of<QueueProvider>(context);
     final userName = authProvider.currentUser?.name ?? 'User';
+    final userPhone = authProvider.currentUser?.phoneNumber ?? '';
+    
+    // Find patient's token if they have one
+    final activeTokens = queueProvider.liveQueue?.activeTokens ?? [];
+    final myToken = activeTokens.cast<dynamic>().firstWhere(
+      (t) => t.patientPhone == userPhone && (t.status.name == 'waiting' || t.status.name == 'booked' || t.status.name == 'arrived'), 
+      orElse: () => null,
+    );
+
+    final currentServing = queueProvider.liveQueue?.currentToken?.tokenNumber.toString() ?? '-';
+    final waitingCount = queueProvider.liveQueue?.waitingCount.toString() ?? '0';
+    
+    // If they have a token, use their wait time, otherwise general wait time
+    final estWait = myToken != null 
+        ? queueProvider.getEstimatedWaitingTime(myToken.id) 
+        : (int.tryParse(waitingCount) ?? 0) * QueueProvider.averageConsultationTime;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -153,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text('CURRENT TOKEN', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
                         const SizedBox(height: 8),
-                        Text('18', style: theme.textTheme.displayMedium?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.bold)),
+                        Text(currentServing, style: theme.textTheme.displayMedium?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -174,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text('WAITING', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
                         const SizedBox(height: 8),
-                        Text('6', style: theme.textTheme.headlineSmall),
+                        Text(waitingCount, style: theme.textTheme.headlineSmall),
                         Icon(Icons.group, color: colorScheme.secondary.withValues(alpha: 0.5), size: 20),
                       ],
                     ),
@@ -194,9 +219,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       children: [
-                        Text('EST. WAIT', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
+                        Text(myToken != null ? 'MY WAIT' : 'EST. WAIT', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.secondary)),
                         const SizedBox(height: 8),
-                        Text('38m', style: theme.textTheme.headlineSmall),
+                        Text('${estWait}m', style: theme.textTheme.headlineSmall),
                         Icon(Icons.schedule, color: colorScheme.secondary.withValues(alpha: 0.5), size: 20),
                       ],
                     ),

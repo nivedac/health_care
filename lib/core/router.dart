@@ -13,6 +13,13 @@ import '../screens/reception/dashboard_screen.dart';
 import '../screens/reception/queue_management_screen.dart';
 import '../screens/reception/patient_search_screen.dart';
 import '../models/appointment_model.dart';
+import '../screens/admin/admin_dashboard_screen.dart';
+import '../screens/admin/employee_management_screen.dart';
+import '../screens/admin/doctor_management_screen.dart';
+import '../screens/admin/reports_screen.dart';
+import '../screens/admin/clinic_settings_screen.dart';
+import '../screens/admin/holiday_management_screen.dart';
+import '../screens/admin/notification_center_screen.dart';
 
 class AppRouter {
   static GoRouter createRouter(AuthProvider authProvider) {
@@ -98,13 +105,14 @@ class AppRouter {
         // Admin Routes
         GoRoute(
           path: '/admin',
-          builder: (context, state) => const Scaffold(body: SizedBox.shrink()),
+          builder: (context, state) => const AdminDashboardScreen(),
           routes: [
-            GoRoute(path: 'employees', builder: (context, state) => const Scaffold(body: SizedBox.shrink())),
-            GoRoute(path: 'doctors', builder: (context, state) => const Scaffold(body: SizedBox.shrink())),
-            GoRoute(path: 'reports', builder: (context, state) => const Scaffold(body: SizedBox.shrink())),
-            GoRoute(path: 'settings', builder: (context, state) => const Scaffold(body: SizedBox.shrink())),
-            GoRoute(path: 'holidays', builder: (context, state) => const Scaffold(body: SizedBox.shrink())),
+            GoRoute(path: 'employees', builder: (context, state) => const EmployeeManagementScreen()),
+            GoRoute(path: 'doctors', builder: (context, state) => const DoctorManagementScreen()),
+            GoRoute(path: 'reports', builder: (context, state) => const ReportsScreen()),
+            GoRoute(path: 'settings', builder: (context, state) => const ClinicSettingsScreen()),
+            GoRoute(path: 'holidays', builder: (context, state) => const HolidayManagementScreen()),
+            GoRoute(path: 'notifications', builder: (context, state) => const NotificationCenterScreen()),
           ],
         ),
       ],

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'reception_layout.dart';
+import 'package:provider/provider.dart';
+import '../../providers/queue_provider.dart';
+import '../../models/token_model.dart';
+import '../../models/queue_model.dart';
+import '../../widgets/dashboard_layout.dart';
 
 class QueueManagementScreen extends StatelessWidget {
   const QueueManagementScreen({super.key});
@@ -9,10 +13,15 @@ class QueueManagementScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
+    final queueProvider = Provider.of<QueueProvider>(context);
+    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
+    final currentToken = queue.currentToken;
+    final waitingTokens = queue.activeTokens.where((t) => t.status == QueueStatus.waiting || t.status == QueueStatus.arrived).toList();
+    
     // We will consume QueueProvider later if needed
     // For now we just implement the UI exactly.
 
-    return ReceptionLayout(
+    return DashboardLayout(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
         child: Column(
@@ -112,54 +121,53 @@ class QueueManagementScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Text(
-                              'CURRENT TOKEN',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                            Text(
-                              'A-124',
-                              style: theme.textTheme.displayMedium?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            CircleAvatar(
-                              radius: 48,
-                              backgroundColor: colorScheme.surfaceContainer,
-                              child: Icon(Icons.person, size: 48, color: colorScheme.onSurfaceVariant),
-                            ),
-                            const SizedBox(height: 16),
-                            Text('Robert Patterson', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                            Text('+1 (555) 012-3456', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
-                            const SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Chip(label: const Text('Age: 68'), backgroundColor: colorScheme.surfaceContainer),
-                                const SizedBox(width: 8),
-                                Chip(label: const Text('Regular Checkup'), backgroundColor: colorScheme.surfaceContainer),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: colorScheme.primary,
-                                  foregroundColor: colorScheme.onPrimary,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              Text(
+                                currentToken != null ? 'CURRENT TOKEN' : 'NO PATIENT',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5,
                                 ),
-                                onPressed: () {},
-                                icon: const Icon(Icons.check_circle),
-                                label: const Text('Complete Visit', style: TextStyle(fontWeight: FontWeight.bold)),
                               ),
-                            ),
+                              Text(
+                                currentToken != null ? '${currentToken.tokenNumber}' : '-',
+                                style: theme.textTheme.displayMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              CircleAvatar(
+                                radius: 48,
+                                backgroundColor: colorScheme.surfaceContainer,
+                                child: Icon(Icons.person, size: 48, color: colorScheme.onSurfaceVariant),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(currentToken != null ? (currentToken.patientName ?? 'Unknown') : 'Waiting', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                              Text(currentToken != null ? (currentToken.patientPhone ?? '-') : '-', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+                              const SizedBox(height: 12),
+                              if (currentToken != null)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Chip(label: const Text('Consultation'), backgroundColor: colorScheme.surfaceContainer),
+                                  ],
+                                ),
+                              const SizedBox(height: 24),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: colorScheme.primary,
+                                    foregroundColor: colorScheme.onPrimary,
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                  onPressed: currentToken != null ? () => queueProvider.completeConsultation(currentToken.id) : null,
+                                  icon: const Icon(Icons.check_circle),
+                                  label: const Text('Complete Visit', style: TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                              ),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -237,7 +245,7 @@ class QueueManagementScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Text(
-                                      '8 Waiting',
+                                      '${waitingTokens.length} Waiting',
                                       style: theme.textTheme.labelMedium?.copyWith(
                                         color: colorScheme.primary,
                                         fontWeight: FontWeight.bold,
@@ -266,26 +274,45 @@ class QueueManagementScreen extends StatelessWidget {
                           ),
                         ),
                         // Patient Row
-                        _buildPatientRow(context, 'A-125', 'Priority', 'Amanda Collins', 'ID: 8829-X • Allergy: Penicillin', '04m', colorScheme.error, true),
-                        const Divider(height: 1),
-                        _buildPatientRow(context, 'A-126', 'Waiting', 'Daniel Martinez', 'ID: 4421-M • Follow-up Visit', '18m', colorScheme.onSurface, false),
-                        const Divider(height: 1),
-                        _buildPatientRow(context, 'A-127', 'Waiting', 'Liam Henderson', 'ID: 1092-L • New Patient Intake', '25m', colorScheme.onSurface, false),
-                        const Divider(height: 1),
-                        _buildPatientRow(context, 'B-004', 'Walk-in', 'Sophie Turner', 'ID: 7210-S • Acute Symptom Review', '32m', colorScheme.secondary, false),
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            border: Border(top: BorderSide(color: colorScheme.outlineVariant)),
+                        if (waitingTokens.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Center(child: Text('No patients in waiting list', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant))),
                           ),
-                          child: Center(
-                            child: TextButton.icon(
-                              onPressed: () {},
-                              icon: const Text('View All 8 Waiting Patients'),
-                              label: const Icon(Icons.arrow_downward, size: 16),
+                        ...waitingTokens.map((token) {
+                          return Column(
+                            children: [
+                              _buildPatientRow(
+                                context: context, 
+                                token: '${token.tokenNumber}', 
+                                status: token.status.name, 
+                                name: token.patientName ?? 'Unknown', 
+                                details: token.patientPhone ?? '-', 
+                                waitTime: '${queueProvider.getEstimatedWaitingTime(token.id)}m', 
+                                statusColor: colorScheme.onSurface, 
+                                isPriority: false,
+                                onCall: () => queueProvider.callNextPatient(null),
+                                onSkip: () => queueProvider.skipPatient(token.id),
+                                onComplete: () => queueProvider.completeConsultation(token.id),
+                              ),
+                              const Divider(height: 1),
+                            ],
+                          );
+                        }),
+                        if (waitingTokens.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              border: Border(top: BorderSide(color: colorScheme.outlineVariant)),
+                            ),
+                            child: Center(
+                              child: TextButton.icon(
+                                onPressed: () {},
+                                icon: Text('View All ${waitingTokens.length} Waiting Patients'),
+                                label: const Icon(Icons.arrow_downward, size: 16),
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -298,7 +325,19 @@ class QueueManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientRow(BuildContext context, String token, String status, String name, String details, String waitTime, Color statusColor, bool isPriority) {
+  Widget _buildPatientRow({
+    required BuildContext context, 
+    required String token, 
+    required String status, 
+    required String name, 
+    required String details, 
+    required String waitTime, 
+    required Color statusColor, 
+    required bool isPriority,
+    required VoidCallback onCall,
+    required VoidCallback onSkip,
+    required VoidCallback onComplete,
+  }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     
@@ -344,17 +383,17 @@ class QueueManagementScreen extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.campaign, color: colorScheme.primary),
-                onPressed: () {},
+                onPressed: onCall,
                 tooltip: 'Call Patient',
               ),
               IconButton(
                 icon: Icon(Icons.fast_forward, color: colorScheme.secondary),
-                onPressed: () {},
+                onPressed: onSkip,
                 tooltip: 'Skip Patient',
               ),
               IconButton(
                 icon: Icon(Icons.check_circle, color: colorScheme.tertiary),
-                onPressed: () {},
+                onPressed: onComplete,
                 tooltip: 'Mark Complete',
               ),
             ],

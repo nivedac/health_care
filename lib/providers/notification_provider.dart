@@ -34,4 +34,17 @@ class NotificationProvider extends ChangeNotifier {
       // Handle error implicitly
     }
   }
+
+  void addMockNotification(String userId, String title, String body, String type) {
+    final notification = NotificationModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      userId: userId,
+      title: title,
+      message: body,
+      timestamp: DateTime.now(),
+      isRead: false,
+    );
+    _notifications.insert(0, notification);
+    notifyListeners();
+  }
 }

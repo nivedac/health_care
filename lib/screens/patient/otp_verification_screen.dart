@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/inputs.dart';
 
@@ -14,23 +16,34 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   int _timeLeft = 119;
   bool _isVerifying = false;
 
+  String _currentOtp = '';
+
   void _onVerify() async {
+    if (_currentOtp.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid OTP')),
+      );
+      return;
+    }
+
     setState(() {
       _isVerifying = true;
     });
     
-    // Simulate verification delay
-    await Future.delayed(const Duration(seconds: 1));
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.verifyOtp(_currentOtp);
     
     if (mounted) {
       setState(() {
         _isVerifying = false;
       });
-      // The router config has auth logic. Since we haven't actually logged in 
-      // the authProvider during OTP, we'll assume it's mock flow and navigate.
-      // But typically we should call authProvider.verifyOtp() here.
-      // For now, navigate to home (or registration if new user).
-      context.go('/patient');
+      if (success) {
+        context.go('/patient');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid OTP')),
+        );
+      }
     }
   }
 
@@ -180,7 +193,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         const SizedBox(height: 32),
                         
                         // OTP Input Group
-                        const OTPField(length: 6),
+                        OTPField(
+                          length: 6,
+                          onCompleted: (val) {
+                            _currentOtp = val;
+                          },
+                        ),
                         
                         const SizedBox(height: 32),
                         

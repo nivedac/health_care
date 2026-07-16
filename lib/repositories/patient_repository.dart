@@ -1,29 +1,28 @@
 import '../models/patient_model.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/patient_model.dart';
+
 class PatientRepository {
-  final List<PatientModel> _mockPatients = [
-    PatientModel(id: 'p1', userId: 'u4', phoneNumber: '1234567890', dateOfBirth: DateTime(1990, 1, 1), gender: 'Male', bloodGroup: 'O+'),
-    PatientModel(id: 'p2', userId: 'u5', phoneNumber: '0987654321', dateOfBirth: DateTime(1985, 5, 12), gender: 'Female', bloodGroup: 'A+'),
-  ];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String _collection = 'patients';
 
   Future<List<PatientModel>> getPatients() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return _mockPatients;
+    final snapshot = await _firestore.collection(_collection).get();
+    return snapshot.docs.map((doc) => PatientModel.fromJson({...doc.data(), 'id': doc.id})).toList();
   }
 
   Future<PatientModel?> getPatientById(String id) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    try {
-      return _mockPatients.firstWhere((p) => p.id == id);
-    } catch (e) {
-      return null;
+    final doc = await _firestore.collection(_collection).doc(id).get();
+    if (doc.exists) {
+      return PatientModel.fromJson({...doc.data()!, 'id': doc.id});
     }
+    return null;
   }
 
   Future<PatientModel> addPatient(PatientModel patient) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final newPatient = patient.copyWith(id: 'p${_mockPatients.length + 1}');
-    _mockPatients.add(newPatient);
-    return newPatient;
+    final docRef = await _firestore.collection(_collection).add(patient.toJson());
+    return patient.copyWith(id: docRef.id);
   }
 }
+

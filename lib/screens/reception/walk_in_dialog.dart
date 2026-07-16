@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/queue_provider.dart';
 
 class WalkInDialog extends StatefulWidget {
   const WalkInDialog({super.key});
@@ -34,8 +36,12 @@ class _WalkInDialogState extends State<WalkInDialog> {
       
       if (!mounted) return;
       
-      // In a real app we would call a method on QueueProvider
-      // queueProvider.addWalkInPatient(...)
+      final queueProvider = Provider.of<QueueProvider>(context, listen: false);
+      queueProvider.generateToken(
+        patientName: _nameController.text, 
+        patientPhone: _phoneController.text,
+        isWalkIn: true,
+      );
       
       setState(() => _isGenerating = false);
       

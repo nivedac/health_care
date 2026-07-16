@@ -70,7 +70,7 @@ class SearchField extends StatelessWidget {
   }
 }
 
-class OTPField extends StatelessWidget {
+class OTPField extends StatefulWidget {
   final int length;
   final ValueChanged<String>? onCompleted;
 
@@ -81,15 +81,43 @@ class OTPField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<OTPField> createState() => _OTPFieldState();
+}
+
+class _OTPFieldState extends State<OTPField> {
+  late List<TextEditingController> _controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(widget.length, (_) => TextEditingController());
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _checkCompletion() {
+    String otp = _controllers.map((c) => c.text).join();
+    if (otp.length == widget.length && widget.onCompleted != null) {
+      widget.onCompleted!(otp);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Basic placeholder for OTP field, can be enhanced with a package like pin_code_fields later
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(
-        length,
+        widget.length,
         (index) => SizedBox(
           width: 40,
           child: TextField(
+            controller: _controllers[index],
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             maxLength: 1,
@@ -98,8 +126,11 @@ class OTPField extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
             onChanged: (val) {
+              _checkCompletion();
               if (val.isNotEmpty) {
                 FocusScope.of(context).nextFocus();
+              } else {
+                FocusScope.of(context).previousFocus();
               }
             },
           ),
