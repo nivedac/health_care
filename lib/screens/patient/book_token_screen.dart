@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/appointment_provider.dart';
 import '../../providers/queue_provider.dart';
 import '../../models/appointment_model.dart';
+import '../../widgets/doctor_info_card.dart';
 
 class BookTokenScreen extends StatelessWidget {
   const BookTokenScreen({super.key});
@@ -98,96 +99,7 @@ class BookTokenScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Doctor Info Card
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerLowest,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: colorScheme.surfaceContainerHighest),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 40, offset: const Offset(0, 4)),
-                        ],
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              'https://lh3.googleusercontent.com/aida-public/AB6AXuAx7EydRwTiRDUurpArV0eJbyMJY6LsrPjRsfexFhgAsYn-q81g91L9q5qEecAHr2Ien-e_nmXQXBmz1z00GKM89KBGsNu23Sh3i8nthq9C6JjHYC4j_WnpWq7BjNDEzE_BVvmxFQPkamP3wPciL43jjWmM6ABahF-oeGckIjrCL24Uv29QvD7z8loXEmmOTIw53kXLmvDaKNafoCV-xfOMnjzGS_832q8QzOWCWijmHLS-eBhbstJdYq_xri_WZPEcUsFUrVX2Yw',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Dr. Baiju', style: theme.textTheme.titleMedium),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: colorScheme.primaryContainer.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.verified, size: 14, color: colorScheme.primary),
-                                          const SizedBox(width: 4),
-                                          Text('Available', style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.primary)),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(Icons.medical_services, size: 16, color: colorScheme.secondary),
-                                    const SizedBox(width: 4),
-                                    Text('General Physician', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.surfaceContainerLow,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          color: colorScheme.primary.withValues(alpha: 0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(Icons.schedule, size: 18, color: colorScheme.primary),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Today's Timing", style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant)),
-                                          Text("4:30 PM - 7:30 PM", style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const DoctorInfoCard(),
                     const SizedBox(height: 24),
                     
                     Text('Booking Details', style: theme.textTheme.titleMedium),
