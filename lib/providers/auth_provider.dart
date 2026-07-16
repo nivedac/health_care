@@ -10,6 +10,10 @@ class AuthProvider extends ChangeNotifier {
       : _repository = repository ?? AuthRepository();
   UserModel? _currentUser;
   bool _isLoading = false;
+  // ignore: unused_field
+  String? _phoneNumber;
+  // ignore: unused_field
+  String? _pendingVerificationId;
 
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;

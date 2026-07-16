@@ -97,7 +97,9 @@ class _ClinicSettingsScreenState extends State<ClinicSettingsScreen> {
       );
 
       await provider.updateSettings(updatedSettings);
-      if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
+      if (!mounted) return;
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Settings saved successfully!')),
       );

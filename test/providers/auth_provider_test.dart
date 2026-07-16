@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:baijus/providers/auth_provider.dart';
 import 'package:baijus/models/user_model.dart';
-import 'package:baijus/providers/auth_provider.dart';
-import 'package:baijus/models/user_model.dart';
 import 'package:baijus/repositories/auth_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
 class MockAuthRepository implements AuthRepository {
   @override
@@ -11,18 +10,35 @@ class MockAuthRepository implements AuthRepository {
     return UserModel(
       id: '123',
       name: 'John Doe',
+      email: 'john@example.com',
       phoneNumber: phone,
-      role: UserRole.patient,
-      createdAt: DateTime.now(),
+      role: 'patient',
     );
   }
 
   @override
   Future<void> logout() async {}
   
+
   @override
-  Future<UserModel> registerPatient(UserModel user, String password) async {
-    return user;
+  Future<UserModel?> getCurrentUser() async {
+    return null;
+  }
+
+  @override
+  Future<void> requestOtp(String phoneNumber, Function(String) codeSent, Function(FirebaseAuthException) verificationFailed) async {
+    codeSent('dummy_verification_id');
+  }
+
+  @override
+  Future<UserModel> verifyOtp(String otp) async {
+    return const UserModel(
+      id: '123',
+      name: 'John Doe',
+      email: 'john@example.com',
+      phoneNumber: '9876543210',
+      role: 'patient',
+    );
   }
 }
 
