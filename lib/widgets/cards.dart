@@ -6,11 +6,11 @@ class DashboardCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   const DashboardCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.child,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +52,12 @@ class StatCard extends StatelessWidget {
   final Color? iconColor;
 
   const StatCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     required this.icon,
     this.iconColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class StatCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (iconColor ?? Theme.of(context).colorScheme.primary).withOpacity(0.1),
+                color: (iconColor ?? Theme.of(context).colorScheme.primary).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: iconColor ?? Theme.of(context).colorScheme.primary),
@@ -110,7 +110,7 @@ class PatientCard extends StatelessWidget {
   final String id;
   final VoidCallback? onTap;
 
-  const PatientCard({Key? key, required this.name, required this.id, this.onTap}) : super(key: key);
+  const PatientCard({super.key, required this.name, required this.id, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,7 @@ class QueueCard extends StatelessWidget {
   final String tokenNumber;
   final String status;
 
-  const QueueCard({Key? key, required this.tokenNumber, required this.status}) : super(key: key);
+  const QueueCard({super.key, required this.tokenNumber, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class AppointmentCard extends StatelessWidget {
   final String doctorName;
   final String status;
 
-  const AppointmentCard({Key? key, required this.date, required this.doctorName, required this.status}) : super(key: key);
+  const AppointmentCard({super.key, required this.date, required this.doctorName, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +164,7 @@ class DoctorCard extends StatelessWidget {
   final String name;
   final String specialization;
 
-  const DoctorCard({Key? key, required this.name, required this.specialization}) : super(key: key);
+  const DoctorCard({super.key, required this.name, required this.specialization});
 
   @override
   Widget build(BuildContext context) {

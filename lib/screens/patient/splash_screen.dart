@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -59,9 +59,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               height: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primaryContainer.withOpacity(0.05),
+                color: colorScheme.primaryContainer.withValues(alpha: 0.05),
                 boxShadow: [
-                  BoxShadow(color: colorScheme.primaryContainer.withOpacity(0.05), blurRadius: 100),
+                  BoxShadow(color: colorScheme.primaryContainer.withValues(alpha: 0.05), blurRadius: 100),
                 ],
               ),
             ),
@@ -76,9 +76,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               height: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primaryContainer.withOpacity(0.05),
+                color: colorScheme.primaryContainer.withValues(alpha: 0.05),
                 boxShadow: [
-                  BoxShadow(color: colorScheme.primaryContainer.withOpacity(0.05), blurRadius: 120),
+                  BoxShadow(color: colorScheme.primaryContainer.withValues(alpha: 0.05), blurRadius: 120),
                 ],
               ),
             ),
@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                         height: 180,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: colorScheme.primary.withOpacity(0.3),
+                                          color: colorScheme.primary.withValues(alpha: 0.3),
                                         ),
                                       ),
                                     ),
@@ -156,7 +156,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                   color: colorScheme.surface,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: colorScheme.surfaceVariant,
+                                    color: colorScheme.surfaceContainerHighest,
                                     width: 2,
                                   ),
                                   boxShadow: const [

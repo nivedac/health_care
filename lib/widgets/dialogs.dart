@@ -8,12 +8,12 @@ class ConfirmationDialog extends StatelessWidget {
   final VoidCallback onCancel;
 
   const ConfirmationDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     required this.onConfirm,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class ConfirmationDialog extends StatelessWidget {
 class SuccessDialog extends StatelessWidget {
   final String message;
 
-  const SuccessDialog({Key? key, required this.message}) : super(key: key);
+  const SuccessDialog({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class SuccessDialog extends StatelessWidget {
 class LoadingDialog extends StatelessWidget {
   final String message;
 
-  const LoadingDialog({Key? key, this.message = 'Loading...'}) : super(key: key);
+  const LoadingDialog({super.key, this.message = 'Loading...'});
 
   @override
   Widget build(BuildContext context) {

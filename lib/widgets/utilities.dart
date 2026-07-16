@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key? key}) : super(key: key);
+  const LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,10 @@ class EmptyStateWidget extends StatelessWidget {
   final IconData icon;
 
   const EmptyStateWidget({
-    Key? key,
+    super.key,
     required this.message,
     this.icon = Icons.inbox,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +46,10 @@ class ErrorStateWidget extends StatelessWidget {
   final VoidCallback onRetry;
 
   const ErrorStateWidget({
-    Key? key,
+    super.key,
     required this.error,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class ErrorStateWidget extends StatelessWidget {
 class NoInternetWidget extends StatelessWidget {
   final VoidCallback onRetry;
 
-  const NoInternetWidget({Key? key, required this.onRetry}) : super(key: key);
+  const NoInternetWidget({super.key, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

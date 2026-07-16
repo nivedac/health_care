@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/queue_model.dart';
-import '../models/token_model.dart';
 
 class QueueRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

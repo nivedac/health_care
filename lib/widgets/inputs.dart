@@ -9,14 +9,14 @@ class AppTextField extends StatelessWidget {
   final String? Function(String?)? validator;
 
   const AppTextField({
-    Key? key,
+    super.key,
     required this.label,
     this.hint,
     this.controller,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +44,11 @@ class SearchField extends StatelessWidget {
   final TextEditingController? controller;
 
   const SearchField({
-    Key? key,
+    super.key,
     this.hint = 'Search...',
     this.onChanged,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +75,10 @@ class OTPField extends StatefulWidget {
   final ValueChanged<String>? onCompleted;
 
   const OTPField({
-    Key? key,
+    super.key,
     this.length = 6,
     this.onCompleted,
-  }) : super(key: key);
+  });
 
   @override
   State<OTPField> createState() => _OTPFieldState();

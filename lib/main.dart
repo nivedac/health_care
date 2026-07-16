@@ -16,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'core/error_handler.dart';
+import 'widgets/offline_banner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,9 @@ class MainApp extends StatelessWidget {
             routerConfig: AppRouter.createRouter(authProvider),
             debugShowCheckedModeBanner: false,
             scaffoldMessengerKey: ErrorHandler.scaffoldMessengerKey,
+            builder: (context, child) {
+              return OfflineBannerWrapper(child: child);
+            },
           );
         },
       ),

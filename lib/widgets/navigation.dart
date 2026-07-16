@@ -4,7 +4,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
 
-  const CustomAppBar({Key? key, required this.title, this.actions}) : super(key: key);
+  const CustomAppBar({super.key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,12 @@ class Sidebar extends StatelessWidget {
   final Widget? header;
 
   const Sidebar({
-    Key? key,
+    super.key,
     required this.items,
     required this.selectedIndex,
     required this.onItemSelected,
     this.header,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class Sidebar extends StatelessWidget {
                     ),
                   ),
                   selected: isSelected,
-                  selectedTileColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.1),
+                  selectedTileColor: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.1),
                   onTap: () => onItemSelected(index),
                 );
               },
@@ -98,10 +98,10 @@ class BottomNavigation extends StatelessWidget {
   final ValueChanged<int> onItemSelected;
 
   const BottomNavigation({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

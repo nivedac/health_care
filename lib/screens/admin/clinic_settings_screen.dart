@@ -209,7 +209,7 @@ class _ClinicSettingsScreenState extends State<ClinicSettingsScreen> {
                               });
                             },
                             contentPadding: EdgeInsets.zero,
-                            activeColor: colorScheme.primary,
+                            activeThumbColor: colorScheme.primary,
                           ),
                         ],
                       ),

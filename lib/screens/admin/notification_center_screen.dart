@@ -96,7 +96,7 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
                           Text('Send New Notification', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                           const SizedBox(height: 24),
                           DropdownButtonFormField<String>(
-                            value: _targetGroup,
+                            initialValue: _targetGroup,
                             decoration: const InputDecoration(labelText: 'Target Audience', border: OutlineInputBorder()),
                             items: _groups.map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
                             onChanged: (v) => setState(() => _targetGroup = v!),

@@ -1,7 +1,6 @@
 import '../models/appointment_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/appointment_model.dart';
 
 class AppointmentRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -6,7 +6,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/inputs.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({Key? key}) : super(key: key);
+  const OtpVerificationScreen({super.key});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -76,9 +76,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               height: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primaryContainer.withOpacity(0.1),
+                color: colorScheme.primaryContainer.withValues(alpha: 0.1),
                 boxShadow: [
-                  BoxShadow(color: colorScheme.primaryContainer.withOpacity(0.1), blurRadius: 100),
+                  BoxShadow(color: colorScheme.primaryContainer.withValues(alpha: 0.1), blurRadius: 100),
                 ],
               ),
             ),
@@ -91,9 +91,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               height: MediaQuery.of(context).size.width * 0.7,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.secondaryContainer.withOpacity(0.15),
+                color: colorScheme.secondaryContainer.withValues(alpha: 0.15),
                 boxShadow: [
-                  BoxShadow(color: colorScheme.secondaryContainer.withOpacity(0.15), blurRadius: 120),
+                  BoxShadow(color: colorScheme.secondaryContainer.withValues(alpha: 0.15), blurRadius: 120),
                 ],
               ),
             ),
@@ -114,7 +114,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 4,
                           ),
                         ],
@@ -140,7 +140,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 40,
                           offset: const Offset(0, 20),
                         ),
@@ -168,7 +168,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           width: 64,
                           height: 64,
                           decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer.withOpacity(0.1),
+                            color: colorScheme.primaryContainer.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(Icons.shield, color: colorScheme.primary, size: 36),

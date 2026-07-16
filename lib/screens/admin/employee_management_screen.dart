@@ -247,14 +247,14 @@ class _EmployeeFormDialogState extends State<_EmployeeFormDialog> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _role,
+                  initialValue: _role,
                   decoration: const InputDecoration(labelText: 'Role', border: OutlineInputBorder()),
                   items: _roles.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
                   onChanged: (v) => setState(() => _role = v!),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _department,
+                  initialValue: _department,
                   decoration: const InputDecoration(labelText: 'Department', border: OutlineInputBorder()),
                   items: _departments.map((d) => DropdownMenuItem(value: d, child: Text(d))).toList(),
                   onChanged: (v) => setState(() => _department = v!),

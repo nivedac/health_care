@@ -1,8 +1,6 @@
 import '../models/holiday_model.dart';
-import 'package:uuid/uuid.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/holiday_model.dart';
 
 class HolidayRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

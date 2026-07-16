@@ -162,7 +162,7 @@ class QueueProvider extends ChangeNotifier {
     final int nextTokenNum = _liveQueue!.activeTokens.length + 1;
     final newToken = TokenModel(
       id: const Uuid().v4(),
-      appointmentId: 'mock_apt_${nextTokenNum}',
+      appointmentId: 'mock_apt_$nextTokenNum',
       tokenNumber: nextTokenNum,
       issuedAt: DateTime.now(),
       status: isWalkIn ? QueueStatus.waiting : QueueStatus.booked,
