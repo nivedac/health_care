@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 import '../repositories/auth_repository.dart';
+import '../core/error_handler.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _repository = AuthRepository();
@@ -29,12 +30,12 @@ class AuthProvider extends ChangeNotifier {
           debugPrint('Code sent: $verificationId');
         },
         (error) {
-          debugPrint('Verification failed: $error');
+          ErrorHandler.handleError(error);
         },
       );
       return true;
-    } catch (e) {
-      debugPrint('Login error: $e');
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
       return false;
     } finally {
       _isLoading = false;
@@ -48,8 +49,8 @@ class AuthProvider extends ChangeNotifier {
     try {
       _currentUser = await _repository.verifyOtp(otp);
       return true;
-    } catch (e) {
-      debugPrint('Verify OTP error: $e');
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
       return false;
     } finally {
       _isLoading = false;

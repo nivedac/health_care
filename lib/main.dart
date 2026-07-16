@@ -15,6 +15,7 @@ import 'providers/holiday_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
+import 'core/error_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,7 @@ class MainApp extends StatelessWidget {
             theme: AppTheme.patientTheme, // Default to patient theme, we use Theme override in specific layouts
             routerConfig: AppRouter.createRouter(authProvider),
             debugShowCheckedModeBanner: false,
+            scaffoldMessengerKey: ErrorHandler.scaffoldMessengerKey,
           );
         },
       ),

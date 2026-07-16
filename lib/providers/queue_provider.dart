@@ -4,6 +4,7 @@ import '../models/token_model.dart';
 import '../repositories/queue_repository.dart';
 import 'notification_provider.dart';
 import 'package:uuid/uuid.dart';
+import '../core/error_handler.dart';
 
 class QueueProvider extends ChangeNotifier {
   final QueueRepository _repository = QueueRepository();
@@ -36,6 +37,8 @@ class QueueProvider extends ChangeNotifier {
           );
         }
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

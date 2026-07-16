@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/holiday_model.dart';
 import '../repositories/holiday_repository.dart';
+import '../core/error_handler.dart';
 
 class HolidayProvider extends ChangeNotifier {
   final HolidayRepository _repository = HolidayRepository();
@@ -15,6 +16,8 @@ class HolidayProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _holidays = await _repository.getHolidays();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -27,6 +30,8 @@ class HolidayProvider extends ChangeNotifier {
     try {
       final newHoliday = await _repository.addHoliday(holiday);
       _holidays.add(newHoliday);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -42,6 +47,8 @@ class HolidayProvider extends ChangeNotifier {
       if (index >= 0) {
         _holidays[index] = updatedHoliday;
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -54,6 +61,8 @@ class HolidayProvider extends ChangeNotifier {
     try {
       await _repository.deleteHoliday(id);
       _holidays.removeWhere((h) => h.id == id);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import '../repositories/notification_repository.dart';
+import '../core/error_handler.dart';
 
 class NotificationProvider extends ChangeNotifier {
   final NotificationRepository _repository = NotificationRepository();
@@ -16,6 +17,8 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _notifications = await _repository.getNotifications(userId);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -30,8 +33,8 @@ class NotificationProvider extends ChangeNotifier {
         _notifications[index] = _notifications[index].copyWith(isRead: true);
         notifyListeners();
       }
-    } catch (e) {
-      // Handle error implicitly
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/employee_model.dart';
 import '../repositories/employee_repository.dart';
+import '../core/error_handler.dart';
 
 class EmployeeProvider extends ChangeNotifier {
   final EmployeeRepository _repository = EmployeeRepository();
@@ -15,6 +16,8 @@ class EmployeeProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _employees = await _repository.getEmployees();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -27,6 +30,8 @@ class EmployeeProvider extends ChangeNotifier {
     try {
       final newEmployee = await _repository.addEmployee(employee);
       _employees.add(newEmployee);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -42,6 +47,8 @@ class EmployeeProvider extends ChangeNotifier {
       if (index >= 0) {
         _employees[index] = updatedEmployee;
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -57,6 +64,8 @@ class EmployeeProvider extends ChangeNotifier {
       if (index >= 0) {
         _employees[index] = updatedEmployee;
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -69,6 +78,8 @@ class EmployeeProvider extends ChangeNotifier {
     try {
       await _repository.deleteEmployee(id);
       _employees.removeWhere((e) => e.id == id);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

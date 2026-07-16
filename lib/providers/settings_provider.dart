@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/clinic_settings_model.dart';
 import '../repositories/settings_repository.dart';
+import '../core/error_handler.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final SettingsRepository _repository = SettingsRepository();
@@ -15,6 +16,8 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _settings = await _repository.getSettings();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -26,6 +29,8 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _settings = await _repository.updateSettings(newSettings);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

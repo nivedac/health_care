@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/doctor_model.dart';
 import '../repositories/doctor_repository.dart';
+import '../core/error_handler.dart';
 
 class DoctorProvider extends ChangeNotifier {
   final DoctorRepository _repository = DoctorRepository();
@@ -15,6 +16,8 @@ class DoctorProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _doctors = await _repository.getDoctors();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -27,6 +30,8 @@ class DoctorProvider extends ChangeNotifier {
     try {
       final newDoctor = await _repository.addDoctor(doctor);
       _doctors.add(newDoctor);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -42,6 +47,8 @@ class DoctorProvider extends ChangeNotifier {
       if (index >= 0) {
         _doctors[index] = updatedDoctor;
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -57,6 +64,8 @@ class DoctorProvider extends ChangeNotifier {
       if (index >= 0) {
         _doctors[index] = updatedDoctor;
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -69,6 +78,8 @@ class DoctorProvider extends ChangeNotifier {
     try {
       await _repository.deleteDoctor(id);
       _doctors.removeWhere((d) => d.id == id);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

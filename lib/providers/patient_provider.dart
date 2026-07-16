@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/patient_model.dart';
 import '../repositories/patient_repository.dart';
 
+import '../core/error_handler.dart';
+
 class PatientProvider extends ChangeNotifier {
   final PatientRepository _repository = PatientRepository();
   List<PatientModel> _patients = [];
@@ -15,6 +17,8 @@ class PatientProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _patients = await _repository.getPatients();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -27,6 +31,8 @@ class PatientProvider extends ChangeNotifier {
     try {
       final newPatient = await _repository.addPatient(patient);
       _patients.add(newPatient);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

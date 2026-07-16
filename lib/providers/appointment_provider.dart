@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/appointment_model.dart';
 import '../repositories/appointment_repository.dart';
+import '../core/error_handler.dart';
 
 class AppointmentProvider extends ChangeNotifier {
   final AppointmentRepository _repository = AppointmentRepository();
@@ -15,6 +16,8 @@ class AppointmentProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _appointments = await _repository.getAppointments();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -26,6 +29,8 @@ class AppointmentProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _appointments = await _repository.getAppointmentsByPatientId(patientId);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -38,6 +43,8 @@ class AppointmentProvider extends ChangeNotifier {
     try {
       final newAppt = await _repository.bookAppointment(appointment);
       _appointments.add(newAppt);
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -53,6 +60,8 @@ class AppointmentProvider extends ChangeNotifier {
       if (index != -1) {
         _appointments[index] = _appointments[index].copyWith(status: 'cancelled');
       }
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
       _isLoading = false;
       notifyListeners();

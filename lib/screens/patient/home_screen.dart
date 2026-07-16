@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/queue_provider.dart';
 import '../../widgets/navigation.dart';
+import '../../widgets/loading_skeleton.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -160,6 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 32),
 
             // Queue Dashboard
+            if (queueProvider.isLoading)
+              const ListLoadingSkeleton(itemCount: 1)
+            else
             Row(
               children: [
                 Expanded(
