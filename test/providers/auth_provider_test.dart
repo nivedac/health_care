@@ -60,6 +60,7 @@ void main() {
 
     test('login sets user on success', () async {
       await authProvider.login('9876543210', 'password');
+      await authProvider.verifyOtp('123456');
 
       expect(authProvider.currentUser?.phoneNumber, equals('9876543210'));
       expect(authProvider.isAuthenticated, isTrue);
@@ -68,6 +69,7 @@ void main() {
     
     test('logout clears user state', () async {
       await authProvider.login('9876543210', 'password');
+      await authProvider.verifyOtp('123456');
       expect(authProvider.isAuthenticated, isTrue);
 
       await authProvider.logout();
