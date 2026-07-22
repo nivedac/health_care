@@ -27,6 +27,16 @@ class DoctorInfoCard extends StatelessWidget {
               width: 64,
               height: 64,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: 64,
+                height: 64,
+                color: colorScheme.primaryContainer,
+                child: Icon(
+                  Icons.person,
+                  color: colorScheme.onPrimaryContainer,
+                  size: 36,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 16),

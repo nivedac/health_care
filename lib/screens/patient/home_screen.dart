@@ -69,9 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: const NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuB-9BCHX5xqlqNop2SmTWkDvRPSkLavbf5HMxR8Abz1uIUpLsfaMr4xKnWF3F99jdcw_wG2aqU3EIcx-ewF35Jkou2Jya6htYE5NlRHWe_c4ejXs5DvU5A4yeyk66evusYaJEgUH-DLxufwTWL-8nMVWvUvqOKcQkU298bOwRsPhImfQi00rRJbKmbkojYd-7lbJ-3vzVOA2NsXohKrQjEtpitYB02uba0S4AO5_XRHck8aimoeeB2buT47-9bAjhp6BTGjfxjuZg'),
                 radius: 20,
                 backgroundColor: colorScheme.surfaceContainerHighest,
+                backgroundImage: authProvider.currentUser?.profileImageUrl != null
+                    ? NetworkImage(authProvider.currentUser!.profileImageUrl!)
+                    : null,
+                child: authProvider.currentUser?.profileImageUrl == null
+                    ? Icon(Icons.person, size: 22, color: colorScheme.onSurfaceVariant)
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(

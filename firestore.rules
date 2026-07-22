@@ -18,6 +18,7 @@ service cloud.firestore {
 
     /// Reads the user's role from the trusted Firestore users document.
     /// SECURITY: Role is ALWAYS read from Firestore — never from the request body.
+    /// This is a server-side read, not a client-supplied value.
     function getUserRole() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
     }
@@ -37,19 +38,9 @@ service cloud.firestore {
       return hasRole('reception');
     }
 
-    /// Returns true if the user is a doctor.
-    function isDoctor() {
-      return hasRole('doctor');
-    }
-
-    /// Returns true if the user is any kind of clinic staff.
+    /// Returns true if the user is any kind of clinic staff (admin, reception, doctor).
     function isStaff() {
       return isAuthenticated() && getUserRole() in ['admin', 'reception', 'doctor'];
-    }
-
-    /// Returns true if the user is a patient.
-    function isPatient() {
-      return hasRole('patient');
     }
 
     /// Prevents role escalation: the incoming data must NOT contain a role field,
@@ -59,26 +50,33 @@ service cloud.firestore {
              request.resource.data.role == resource.data.role;
     }
 
-    /// Prevents a new document from assigning any role other than 'patient'.
+    /// Prevents a new users document from assigning any role other than 'patient'.
+    /// Staff accounts must be pre-created by an admin via Console/Cloud Functions.
     function newUserIsPatient() {
       return request.resource.data.role == 'patient';
     }
 
     // =========================================================================
     // USERS COLLECTION
-    // Stores auth profiles and roles for all users (patients + staff).
+    // Stores auth profiles and roles for ALL users (patients + staff).
+    //
+    // Queries validated:
+    //   - auth_repository.dart: .doc(user.uid).get()           → read own
+    //   - auth_repository.dart: .doc(uid).update({fcmToken})   → update own
+    //   - auth_repository.dart: .doc(user.uid).set(newUser)    → create own (patient)
     // =========================================================================
     match /users/{userId} {
       // Any authenticated user can read their own profile.
-      // Staff can read any user profile (needed for patient lookup).
+      // Staff can read any user profile (e.g., reception looking up a patient).
       allow read: if isOwner(userId) || isStaff();
 
       // A new patient can create their OWN document, but ONLY with role='patient'.
-      // This is enforced both here and in the app code.
+      // Staff accounts are created via Firebase Console or admin Cloud Function.
       allow create: if isOwner(userId) && newUserIsPatient();
 
-      // A user can update their own document, but CANNOT change their own role.
-      // Admins can update any user's document (e.g., to assign staff roles).
+      // A user can update their own document (e.g., update FCM token, name).
+      // CONSTRAINT: The role field cannot be changed by the user themselves.
+      // Admins can update any user's document (e.g., to deactivate an account).
       allow update: if (isOwner(userId) && roleIsUnchanged()) || isAdmin();
 
       // Only admins can delete user records.
@@ -87,32 +85,46 @@ service cloud.firestore {
 
     // =========================================================================
     // PATIENTS COLLECTION
-    // Extended patient profile (health data, DOB, etc.).
+    // Extended patient health profiles (DOB, blood group, etc.).
+    //
+    // Queries validated:
+    //   - patient_repository.dart: .get() [full list]               → staff only
+    //   - patient_repository.dart: .doc(id).get()                   → own or staff
+    //   - patient_repository.dart: .add(patient.toJson())           → own or reception
     // =========================================================================
     match /patients/{patientId} {
-      // A patient can read their own record. Staff can read all patient records.
+      // A patient can read their own record. Staff can list/read all patient records.
+      // NOTE: Full collection reads (.get() with no filter) are only reachable
+      //       for staff (reception, admin) — patient app does not call getPatients().
       allow read: if isAuthenticated() &&
                     (resource.data.userId == request.auth.uid || isStaff());
 
-      // A patient can create their own record.
-      // Reception staff can create records for walk-in patients.
+      // A patient can create their own extended profile.
+      // Reception can create a record for a walk-in patient.
       allow create: if isAuthenticated() &&
                       (request.resource.data.userId == request.auth.uid ||
                        isReception() || isAdmin());
 
-      // A patient can update their own record.
-      // Reception/Admin can update any patient record (e.g., updating health info).
+      // A patient can update their own profile.
+      // Reception/Admin can update any patient record.
       allow update: if isAuthenticated() &&
                       (resource.data.userId == request.auth.uid ||
                        isReception() || isAdmin());
 
-      // Only admins can delete patient records.
+      // Only admins can delete patient records (data retention policy).
       allow delete: if isAdmin();
     }
 
     // =========================================================================
     // DOCTORS COLLECTION
-    // Doctor profiles (name, specialization, availability).
+    // Doctor profiles shown to patients during booking.
+    //
+    // Queries validated:
+    //   - doctor_repository.dart: .get() [full list]           → any authenticated
+    //   - doctor_repository.dart: .doc(id).get()               → any authenticated
+    //   - doctor_repository.dart: .add()                       → admin only
+    //   - doctor_repository.dart: .doc(id).update()            → admin only
+    //   - doctor_repository.dart: .doc(id).delete()            → admin only
     // =========================================================================
     match /doctors/{doctorId} {
       // Any authenticated user can read doctor information (needed for booking).
@@ -124,60 +136,70 @@ service cloud.firestore {
 
     // =========================================================================
     // APPOINTMENTS COLLECTION
-    // Appointment records linking patients to doctors.
+    // Links patients to doctors with date, status, and token number.
+    //
+    // Queries validated:
+    //   - appointment_repository.dart: .get() [full list]      → staff only (reception dashboard)
+    //   - appointment_repository.dart: .where('patientId')     → own patientId or staff
+    //   - appointment_repository.dart: .add(appointment)       → own patientId or reception
+    //   - appointment_repository.dart: .doc(id).update(status) → own or staff
     // =========================================================================
     match /appointments/{appointmentId} {
       // A patient can read only their own appointments.
-      // Staff can read all appointments.
+      // Staff can read all appointments (reception dashboard, admin reports).
+      // NOTE: Full collection reads (.get() with no filter) only succeed for staff.
+      //       Patient queries always filter by patientId == request.auth.uid.
       allow read: if isAuthenticated() &&
                     (resource.data.patientId == request.auth.uid || isStaff());
 
-      // A patient can book an appointment for themselves only.
-      // Reception can book for any patient (walk-in).
+      // A patient can book an appointment where patientId == their UID.
+      // Reception can book for any patient (walk-in, phone booking).
       allow create: if isAuthenticated() &&
                       (request.resource.data.patientId == request.auth.uid ||
                        isReception() || isAdmin());
 
       // A patient can update their own appointment (e.g., cancel it).
-      // Staff can update any appointment (status changes, rescheduling).
-      // CONSTRAINT: Only allowed status transitions should be enforced 
-      //   ideally in Cloud Functions (e.g., patient cannot self-set 'completed').
+      // Staff can update any appointment (rescheduling, marking complete).
+      // NOTE: Status transition enforcement (e.g., patient cannot self-complete)
+      //       will be handled by Cloud Functions in a future phase.
       allow update: if isAuthenticated() &&
-                      (resource.data.patientId == request.auth.uid ||
-                       isStaff());
+                      (resource.data.patientId == request.auth.uid || isStaff());
 
-      // Only staff can hard-delete appointment records.
+      // Only admins can hard-delete appointment records.
       allow delete: if isAdmin();
     }
 
     // =========================================================================
     // QUEUE COLLECTION
-    // Live daily queue state per doctor.
+    // Live daily queue state per doctor (one document per day per doctor).
+    //
+    // Queries validated:
+    //   - queue_repository.dart: .where('doctorId').limit(1).get()  → any auth (view queue position)
+    //   - queue_repository.dart: .add(newQueue.toJson())            → staff (create today's queue)
+    //   - queue_repository.dart: runTransaction() → update          → staff (call next patient)
     // =========================================================================
     match /queue/{queueId} {
-      // Any authenticated user can read queue data (patients need to see their position).
+      // Any authenticated user can read queue data.
+      // Patients need this to see their position and estimated wait time.
       allow read: if isAuthenticated();
 
-      // Only staff can modify the queue (call next patient, mark arrived, etc.).
-      // Patients CANNOT modify queue state (no self-advancing the queue).
+      // Only staff can create or modify queue documents.
+      // Patients CANNOT advance or modify the queue.
+      // The initial queue document is created by reception when opening the clinic.
       allow write: if isStaff();
     }
 
     // =========================================================================
-    // TOKEN COUNTERS (SUBCOLLECTION under queue)
-    // Atomic counters used to generate safe token numbers.
-    // =========================================================================
-    match /queue/{queueId}/counters/{counterId} {
-      // Staff and system can read/write atomic counters.
-      allow read, write: if isStaff();
-    }
-
-    // =========================================================================
     // SETTINGS COLLECTION
-    // Singleton clinic configuration document (clinic_settings).
+    // Singleton clinic configuration (document ID: clinic_settings).
+    //
+    // Queries validated:
+    //   - settings_repository.dart: .doc('clinic_settings').get()   → any auth
+    //   - settings_repository.dart: .doc('clinic_settings').set()   → admin only
     // =========================================================================
     match /settings/{docId} {
-      // Any authenticated user can read clinic settings (needed for booking rules).
+      // Any authenticated user can read clinic settings.
+      // Needed by the booking screen to check max tokens, opening hours, etc.
       allow read: if isAuthenticated();
 
       // Only admins can modify clinic settings.
@@ -186,11 +208,19 @@ service cloud.firestore {
 
     // =========================================================================
     // EMPLOYEES COLLECTION
-    // Staff employee records (receptionists, nurses, etc.).
+    // Staff employee records (receptionists, admin staff).
+    //
+    // Queries validated:
+    //   - employee_repository.dart: .get() [full list]         → staff only
+    //   - employee_repository.dart: .doc(id).get()             → staff only
+    //   - employee_repository.dart: .add()                     → admin only
+    //   - employee_repository.dart: .doc(id).update()          → admin only
+    //   - employee_repository.dart: .doc(id).update(isActive)  → admin only
+    //   - employee_repository.dart: .doc(id).delete()          → admin only
     // =========================================================================
     match /employees/{employeeId} {
-      // Staff can read employee records (needed for reception dashboard).
-      // Patients cannot access employee data.
+      // Staff can read employee records (reception dashboard shows staff info).
+      // Patients have NO access to employee data.
       allow read: if isStaff();
 
       // Only admins can create, update, or delete employee records.
@@ -199,30 +229,46 @@ service cloud.firestore {
 
     // =========================================================================
     // HOLIDAYS COLLECTION
-    // Clinic holidays that disable bookings.
+    // Clinic holidays that disable appointment booking on specific dates.
+    //
+    // Queries validated:
+    //   - holiday_repository.dart: .get() [full list]          → any auth (booking calendar)
+    //   - holiday_repository.dart: .add()                      → admin only
+    //   - holiday_repository.dart: .doc(id).update()           → admin only
+    //   - holiday_repository.dart: .doc(id).delete()           → admin only
     // =========================================================================
     match /holidays/{holidayId} {
-      // Any authenticated user can read holidays (needed to disable booking dates).
+      // Any authenticated user can read holidays.
+      // The booking calendar checks for holidays before allowing date selection.
       allow read: if isAuthenticated();
 
       // Only admins can manage holidays.
+      // NOTE: Original SECURITY_RULES.md allowed reception to write holidays.
+      //       Updated to admin-only as holiday management is an admin function.
       allow write: if isAdmin();
     }
 
     // =========================================================================
     // NOTIFICATIONS COLLECTION
-    // Per-user notification inbox.
+    // Per-user in-app notification inbox.
+    //
+    // Queries validated:
+    //   - notification_repository.dart: .where('userId').orderBy('timestamp')  → own userId
+    //   - notification_repository.dart: .doc(id).update({isRead: true})        → own userId
+    //   - notification_repository.dart: .add(notification)                     → staff create
     // =========================================================================
     match /notifications/{notificationId} {
-      // Users can only read their own notifications.
+      // A user can only read their own notifications.
+      // Requires compound index: (userId ASC, timestamp DESC).
       allow read: if isAuthenticated() &&
                     resource.data.userId == request.auth.uid;
 
-      // Only staff or the system (Cloud Functions) should create notifications.
-      // Patients cannot create notifications for others.
+      // Staff can create notifications (reception sending alerts to patients).
+      // In future phases, Cloud Functions will be the primary notification creator.
       allow create: if isStaff();
 
-      // A user can update (mark as read) only their own notification.
+      // A user can update ONLY the isRead field of their own notifications.
+      // This prevents any other field from being tampered with client-side.
       allow update: if isAuthenticated() &&
                       resource.data.userId == request.auth.uid &&
                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
