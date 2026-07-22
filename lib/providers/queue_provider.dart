@@ -3,40 +3,54 @@ import '../models/queue_model.dart';
 import '../models/token_model.dart';
 import '../repositories/queue_repository.dart';
 import 'notification_provider.dart';
-import 'package:uuid/uuid.dart';
 import '../core/error_handler.dart';
 
+/// Manages the real-time queue logic for the clinic.
+///
+/// The `QueueProvider` handles queue advancement (calling next patient,
+/// marking arrived/completed/skipped) and estimated wait time calculation.
+/// It interacts with [QueueRepository] for persistent state and
+/// [NotificationProvider] to dispatch in-app alerts.
+///
+/// ## What this provider does NOT do
+/// - It does NOT generate token numbers (handled atomically by [BookingRepository]).
+/// - It does NOT create appointments (handled by [AppointmentProvider]).
+///
+/// ## Queue lifecycle
+/// 1. Reception opens clinic → [openQueue] creates today's queue document
+/// 2. Patient books → [BookingRepository] creates appointment + token counter
+/// 3. Reception adds booked patient to queue → [addTokenToQueue]
+/// 4. Reception calls next → [callNextPatient]
+/// 5. Reception marks outcomes → [markPatientArrived], [skipPatient], etc.
 class QueueProvider extends ChangeNotifier {
   final QueueRepository _repository = QueueRepository();
   QueueModel? _liveQueue;
   bool _isLoading = false;
+  bool _isQueueOpen = false;
 
-  static const int averageConsultationTime = 8; // minutes
+  /// Average time (in minutes) spent per patient consultation.
+  /// Used for estimated wait time calculation.
+  static const int averageConsultationTime = 8;
 
   QueueModel? get liveQueue => _liveQueue;
   bool get isLoading => _isLoading;
+  bool get isQueueOpen => _isQueueOpen;
 
-  // Initialize with a mock queue if empty
+  // --------------------------------------------------------------------------
+  // FETCH TODAY'S QUEUE
+  // --------------------------------------------------------------------------
+
+  /// Fetches today's live queue for [doctorId].
+  ///
+  /// No longer creates mock data. Returns the real queue from Firestore,
+  /// scoped to today's date. If no queue exists for today, [liveQueue] will
+  /// be null — the reception screen shows an "Open Clinic" button.
   Future<void> fetchLiveQueue(String doctorId) async {
     _isLoading = true;
     notifyListeners();
     try {
-      if (_liveQueue == null || _liveQueue!.doctorId != doctorId) {
-        _liveQueue = await _repository.getLiveQueue(doctorId);
-        
-        // Setup initial mock tokens if empty for testing
-        if (_liveQueue!.activeTokens.isEmpty) {
-          _liveQueue = _liveQueue!.copyWith(
-            activeTokens: [
-              TokenModel(id: const Uuid().v4(), appointmentId: '', tokenNumber: 1, issuedAt: DateTime.now(), status: QueueStatus.inConsultation, patientName: 'Alexander Pierce', patientPhone: '+1 555-0101'),
-              TokenModel(id: const Uuid().v4(), appointmentId: '', tokenNumber: 2, issuedAt: DateTime.now(), status: QueueStatus.waiting, patientName: 'Sarah McEvoy', patientPhone: '+1 555-0102'),
-              TokenModel(id: const Uuid().v4(), appointmentId: '', tokenNumber: 3, issuedAt: DateTime.now(), status: QueueStatus.waiting, patientName: 'Daniel Martinez', patientPhone: '+1 555-0103'),
-              TokenModel(id: const Uuid().v4(), appointmentId: '', tokenNumber: 4, issuedAt: DateTime.now(), status: QueueStatus.booked, patientName: 'Liam Henderson', patientPhone: '+1 555-0104'),
-            ],
-            currentToken: TokenModel(id: 'mock1', appointmentId: '', tokenNumber: 1, issuedAt: DateTime.now(), status: QueueStatus.inConsultation, patientName: 'Alexander Pierce', patientPhone: '+1 555-0101'),
-          );
-        }
-      }
+      _liveQueue = await _repository.getLiveQueue(doctorId);
+      _isQueueOpen = _liveQueue != null;
     } catch (e, stackTrace) {
       ErrorHandler.handleError(e, stackTrace: stackTrace);
     } finally {
@@ -45,21 +59,70 @@ class QueueProvider extends ChangeNotifier {
     }
   }
 
+  // --------------------------------------------------------------------------
+  // OPEN DAILY QUEUE (reception action at clinic open)
+  // --------------------------------------------------------------------------
+
+  /// Creates today's queue document for [doctorId].
+  /// Called by reception when opening the clinic for the day.
+  Future<void> openQueue(String doctorId) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _liveQueue = await _repository.openDailyQueue(doctorId);
+      _isQueueOpen = true;
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ADD BOOKED TOKEN TO QUEUE
+  // --------------------------------------------------------------------------
+
+  /// Adds a booked patient's token to the live queue.
+  ///
+  /// Called after [AppointmentProvider.bookAppointment] succeeds.
+  /// The token number was atomically assigned by [BookingRepository] —
+  /// this just appends the token to the queue's activeTokens array
+  /// using [FieldValue.arrayUnion] (safe for concurrent appends).
+  Future<void> addTokenToQueue(TokenModel token) async {
+    if (_liveQueue == null) return;
+    try {
+      await _repository.addTokenToQueue(
+        queueId: _liveQueue!.id,
+        tokenJson: token.toJson(),
+      );
+      // Optimistic update
+      final updated = List<TokenModel>.from(_liveQueue!.activeTokens)..add(token);
+      _liveQueue = _liveQueue!.copyWith(activeTokens: updated);
+      notifyListeners();
+    } catch (e, stackTrace) {
+      ErrorHandler.handleError(e, stackTrace: stackTrace);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // TOKEN STATUS UPDATES
+  // --------------------------------------------------------------------------
+
   void _updateTokenStatus(String tokenId, QueueStatus status) {
     if (_liveQueue == null) return;
-    
+
     final tokens = List<TokenModel>.from(_liveQueue!.activeTokens);
     final index = tokens.indexWhere((t) => t.id == tokenId);
-    
+
     if (index != -1) {
       tokens[index] = tokens[index].copyWith(status: status);
-      
-      // Update current token if it's the one we are modifying
+
       TokenModel? current = _liveQueue!.currentToken;
       if (current?.id == tokenId) {
         current = tokens[index];
       }
-      
+
       _liveQueue = _liveQueue!.copyWith(
         activeTokens: tokens,
         currentToken: current,
@@ -68,34 +131,48 @@ class QueueProvider extends ChangeNotifier {
     }
   }
 
+  // --------------------------------------------------------------------------
+  // QUEUE ADVANCEMENT (reception actions)
+  // --------------------------------------------------------------------------
+
+  /// Calls the next patient in the queue.
+  ///
+  /// Automatically marks the currently consulting token as [QueueStatus.completed].
+  /// Then advances to the first token with status [QueueStatus.waiting] or
+  /// [QueueStatus.arrived], marking it [QueueStatus.inConsultation].
   void callNextPatient(NotificationProvider? notifs) {
     if (_liveQueue == null) return;
-    
-    // Complete the current one if it's in consultation
-    if (_liveQueue!.currentToken != null && _liveQueue!.currentToken!.status == QueueStatus.inConsultation) {
+
+    // Complete the current consultation
+    if (_liveQueue!.currentToken != null &&
+        _liveQueue!.currentToken!.status == QueueStatus.inConsultation) {
       _updateTokenStatus(_liveQueue!.currentToken!.id, QueueStatus.completed);
     }
-    
+
     // Find next waiting or arrived
     final tokens = _liveQueue!.activeTokens;
     final nextToken = tokens.cast<TokenModel?>().firstWhere(
-      (t) => t?.status == QueueStatus.waiting || t?.status == QueueStatus.arrived,
-      orElse: () => null,
-    );
-    
+          (t) =>
+              t?.status == QueueStatus.waiting ||
+              t?.status == QueueStatus.arrived,
+          orElse: () => null,
+        );
+
     if (nextToken != null) {
       _updateTokenStatus(nextToken.id, QueueStatus.inConsultation);
-      _liveQueue = _liveQueue!.copyWith(currentToken: _liveQueue!.activeTokens.firstWhere((t) => t.id == nextToken.id));
-      
+      _liveQueue = _liveQueue!.copyWith(
+          currentToken: _liveQueue!.activeTokens
+              .firstWhere((t) => t.id == nextToken.id));
+
       notifs?.addMockNotification(
-        'patient_123', 
-        'Your Token Is Being Called', 
-        'Please proceed to Room 302. Doctor is ready.', 
-        'alert'
+        nextToken.patientId ?? 'unknown',
+        'Your Token Is Being Called',
+        'Please proceed to the consultation room. Doctor is ready.',
+        'alert',
       );
-      
+
       notifyListeners();
-      _checkRemainingPatients(notifs);
+      _checkRemainingPatients(notifs, nextToken.patientId);
     } else {
       _liveQueue = _liveQueue!.copyWith(currentToken: null);
       notifyListeners();
@@ -104,17 +181,19 @@ class QueueProvider extends ChangeNotifier {
 
   void recallPatient(String tokenId, NotificationProvider? notifs) {
     _updateTokenStatus(tokenId, QueueStatus.called);
+    final token = _liveQueue?.activeTokens
+        .cast<TokenModel?>()
+        .firstWhere((t) => t?.id == tokenId, orElse: () => null);
     notifs?.addMockNotification(
-      'patient_123', 
-      'Missed Call', 
-      'The doctor called you again. Please proceed to the room immediately.', 
-      'alert'
+      token?.patientId ?? 'unknown',
+      'Missed Call',
+      'The doctor called you again. Please proceed to the room immediately.',
+      'alert',
     );
   }
 
   void skipPatient(String tokenId) {
     _updateTokenStatus(tokenId, QueueStatus.skipped);
-    // If the skipped patient was the current token, we should probably call next
     if (_liveQueue?.currentToken?.id == tokenId) {
       callNextPatient(null);
     }
@@ -128,7 +207,7 @@ class QueueProvider extends ChangeNotifier {
     }
   }
 
-  void cancelAppointment(String tokenId) {
+  void cancelTokenInQueue(String tokenId) {
     _updateTokenStatus(tokenId, QueueStatus.cancelled);
   }
 
@@ -136,78 +215,63 @@ class QueueProvider extends ChangeNotifier {
     _updateTokenStatus(tokenId, QueueStatus.arrived);
   }
 
-  void markPatientNotArrived(String tokenId) {
+  void markPatientNoShow(String tokenId) {
     _updateTokenStatus(tokenId, QueueStatus.skipped);
   }
 
-  TokenModel? generateToken({
-    required String patientName, 
-    required String patientPhone,
-    String? patientId,
-    bool isWalkIn = false,
-  }) {
-    if (_liveQueue == null) return null;
+  // --------------------------------------------------------------------------
+  // ESTIMATED WAIT TIME
+  // --------------------------------------------------------------------------
 
-    // Check if patient already has active booking today
-    if (patientPhone.isNotEmpty) {
-      final existing = _liveQueue!.activeTokens.where((t) => 
-        t.patientPhone == patientPhone && 
-        (t.status == QueueStatus.waiting || t.status == QueueStatus.booked || t.status == QueueStatus.arrived)
-      );
-      if (existing.isNotEmpty) {
-        return null; // Already has active token
-      }
-    }
-
-    final int nextTokenNum = _liveQueue!.activeTokens.length + 1;
-    final newToken = TokenModel(
-      id: const Uuid().v4(),
-      appointmentId: 'mock_apt_$nextTokenNum',
-      tokenNumber: nextTokenNum,
-      issuedAt: DateTime.now(),
-      status: isWalkIn ? QueueStatus.waiting : QueueStatus.booked,
-      patientName: patientName,
-      patientPhone: patientPhone,
-      patientId: patientId,
-    );
-
-    final updatedTokens = List<TokenModel>.from(_liveQueue!.activeTokens)..add(newToken);
-    _liveQueue = _liveQueue!.copyWith(activeTokens: updatedTokens);
-    notifyListeners();
-    
-    return newToken;
-  }
-
+  /// Calculates the estimated waiting time in minutes for [tokenId].
   int getEstimatedWaitingTime(String tokenId) {
     if (_liveQueue == null) return 0;
-    
-    final token = _liveQueue!.activeTokens.cast<TokenModel?>().firstWhere((t) => t?.id == tokenId, orElse: () => null);
-    if (token == null || token.status == QueueStatus.completed || token.status == QueueStatus.cancelled || token.status == QueueStatus.skipped) {
+
+    final token = _liveQueue!.activeTokens
+        .cast<TokenModel?>()
+        .firstWhere((t) => t?.id == tokenId, orElse: () => null);
+
+    if (token == null ||
+        token.status == QueueStatus.completed ||
+        token.status == QueueStatus.cancelled ||
+        token.status == QueueStatus.skipped) {
       return 0;
     }
-    
+
     if (token.status == QueueStatus.inConsultation) return 0;
-    
-    // Count how many people are ahead in the queue (waiting, arrived)
+
+    // Count patients ahead (waiting or arrived with smaller token number)
     final aheadCount = _liveQueue!.activeTokens.where((t) {
-      return (t.status == QueueStatus.waiting || t.status == QueueStatus.arrived) && t.tokenNumber < token.tokenNumber;
+      return (t.status == QueueStatus.waiting ||
+              t.status == QueueStatus.arrived) &&
+          t.tokenNumber < token.tokenNumber;
     }).length;
-    
-    // If there is someone currently in consultation, add 1 to ahead count
-    final inConsultationCount = _liveQueue!.activeTokens.where((t) => t.status == QueueStatus.inConsultation || t.status == QueueStatus.called).length;
-    
+
+    final inConsultationCount = _liveQueue!.activeTokens
+        .where((t) =>
+            t.status == QueueStatus.inConsultation ||
+            t.status == QueueStatus.called)
+        .length;
+
     return (aheadCount + inConsultationCount) * averageConsultationTime;
   }
-  
-  void _checkRemainingPatients(NotificationProvider? notifs) {
+
+  // --------------------------------------------------------------------------
+  // INTERNAL
+  // --------------------------------------------------------------------------
+
+  void _checkRemainingPatients(NotificationProvider? notifs, String? patientId) {
     if (_liveQueue == null) return;
-    final waiting = _liveQueue!.activeTokens.where((t) => t.status == QueueStatus.waiting || t.status == QueueStatus.arrived).length;
+    final waiting = _liveQueue!.activeTokens
+        .where((t) =>
+            t.status == QueueStatus.waiting || t.status == QueueStatus.arrived)
+        .length;
     if (waiting == 5) {
       notifs?.addMockNotification(
-        'patient_123', 
-        'Only 5 Patients Remaining', 
-        'Your turn is approaching soon. Please be near the clinic.', 
-        'reminder'
+        patientId ?? 'unknown',
+        'Only 5 Patients Remaining',
+        'Your turn is approaching soon. Please be near the clinic.',
+        'reminder',
       );
     }
   }

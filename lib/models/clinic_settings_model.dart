@@ -15,6 +15,7 @@ class ClinicSettingsModel extends Equatable {
   final int averageConsultationTimeMinutes;
   final int maximumDailyPatients;
   final bool isQueueEnabled;
+  final bool isBookingOpen;
   final String? tokenPrefix;
 
   const ClinicSettingsModel({
@@ -32,6 +33,7 @@ class ClinicSettingsModel extends Equatable {
     this.averageConsultationTimeMinutes = 15,
     this.maximumDailyPatients = 50,
     this.isQueueEnabled = true,
+    this.isBookingOpen = true,
     this.tokenPrefix,
   });
 
@@ -51,6 +53,7 @@ class ClinicSettingsModel extends Equatable {
       averageConsultationTimeMinutes: json['averageConsultationTimeMinutes'] as int? ?? 15,
       maximumDailyPatients: json['maximumDailyPatients'] as int? ?? 50,
       isQueueEnabled: json['isQueueEnabled'] as bool? ?? true,
+      isBookingOpen: json['isBookingOpen'] as bool? ?? true,
       tokenPrefix: json['tokenPrefix'] as String?,
     );
   }
@@ -71,6 +74,7 @@ class ClinicSettingsModel extends Equatable {
       'averageConsultationTimeMinutes': averageConsultationTimeMinutes,
       'maximumDailyPatients': maximumDailyPatients,
       'isQueueEnabled': isQueueEnabled,
+      'isBookingOpen': isBookingOpen,
       'tokenPrefix': tokenPrefix,
     };
   }
@@ -90,6 +94,7 @@ class ClinicSettingsModel extends Equatable {
     int? averageConsultationTimeMinutes,
     int? maximumDailyPatients,
     bool? isQueueEnabled,
+    bool? isBookingOpen,
     String? tokenPrefix,
   }) {
     return ClinicSettingsModel(
@@ -107,6 +112,7 @@ class ClinicSettingsModel extends Equatable {
       averageConsultationTimeMinutes: averageConsultationTimeMinutes ?? this.averageConsultationTimeMinutes,
       maximumDailyPatients: maximumDailyPatients ?? this.maximumDailyPatients,
       isQueueEnabled: isQueueEnabled ?? this.isQueueEnabled,
+      isBookingOpen: isBookingOpen ?? this.isBookingOpen,
       tokenPrefix: tokenPrefix ?? this.tokenPrefix,
     );
   }
@@ -127,6 +133,7 @@ class ClinicSettingsModel extends Equatable {
         averageConsultationTimeMinutes,
         maximumDailyPatients,
         isQueueEnabled,
+        isBookingOpen,
         tokenPrefix,
       ];
 }

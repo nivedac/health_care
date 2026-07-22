@@ -21,7 +21,18 @@ import '../screens/admin/clinic_settings_screen.dart';
 import '../screens/admin/holiday_management_screen.dart';
 import '../screens/admin/notification_center_screen.dart';
 
+/// Core application routing configuration using [GoRouter].
+/// 
+/// This class encapsulates all navigation logic, route definitions, and 
+/// authentication-based redirection rules. It enforces role-based access 
+/// control (RBAC) by ensuring unauthenticated users cannot access protected 
+/// routes and routing authenticated users to their respective role-based dashboards.
 class AppRouter {
+  /// Creates and configures the main [GoRouter] instance.
+  /// 
+  /// The router listens to the provided [authProvider] for state changes
+  /// and automatically re-evaluates the redirect logic when authentication
+  /// state changes (e.g., on login or logout).
   static GoRouter createRouter(AuthProvider authProvider) {
     return GoRouter(
       initialLocation: '/',

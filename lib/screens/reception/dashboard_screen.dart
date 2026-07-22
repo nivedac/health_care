@@ -177,7 +177,7 @@ class ReceptionDashboardScreen extends StatelessWidget {
                       onCallNext: () => queueProvider.callNextPatient(notificationProvider),
                       onRecall: () => queueProvider.recallPatient(token.id, notificationProvider),
                       onSkip: () => queueProvider.skipPatient(token.id),
-                      onCancel: () => queueProvider.cancelAppointment(token.id),
+                      onCancel: () => queueProvider.cancelTokenInQueue(token.id),
                       onComplete: () => queueProvider.completeConsultation(token.id),
                       onArrive: () => queueProvider.markPatientArrived(token.id),
                     );

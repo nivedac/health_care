@@ -247,7 +247,7 @@ class LiveQueueScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: myToken != null ? () {
-                      queueProvider.cancelAppointment(myToken.id);
+                      queueProvider.cancelTokenInQueue(myToken.id);
                       context.pop();
                     } : null,
                     child: Text('Cancel Booking', style: theme.textTheme.bodyMedium?.copyWith(color: myToken != null ? colorScheme.error : colorScheme.outlineVariant)),

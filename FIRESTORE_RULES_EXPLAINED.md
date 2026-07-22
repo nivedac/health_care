@@ -264,3 +264,25 @@ All other queries use single-field filters (single-field indexes are auto-create
 > (e.g., `appointments by doctorId+date+status`, `queue by doctorId+date`). 
 > Deploying unnecessary indexes wastes storage quota and adds confusion. They will be 
 > added in Phase 3 alongside Cloud Functions when the queries that need them are built.
+
+## Phase 3 Additions — Booking & Queue Transactions
+
+### `tokenCounters` Collection
+- **Functionality**: Provides an atomic counter for the daily queue per doctor.
+- **Rule**: `allow read, write: if isAuthenticated();`
+- **Security Context**: Patients must write to this to atomically increment the counter during the booking transaction. This allows the client-side transaction to function. A malicious patient could artificially increment the counter (disrupting numbering but not escalating privileges). Full hardening will be applied in Phase 3B (Cloud Functions) by restricting this to the backend.
+
+### `bookingLocks` Collection
+- **Functionality**: A mutex preventing duplicate active bookings for the same patient/doctor/date.
+- **Rule**: Patient can `create` only if booking is open for themselves. Patient can `update` their own lock ONLY to set the status to `cancelled` (with `diff` validation). Staff can update any lock. Admin can delete locks (fault recovery).
+- **Security Context**: Prevents patients from bypassing duplicate detection. The only way a patient can release their lock is by cancelling the appointment, which is enforced via the `update` rule. 
+
+### Server-Side `isBookingOpen` Enforcement
+- Appointments and BookingLocks create rules now utilize a custom `isBookingOpen()` Firestore helper.
+- This helper performs a `get()` against `/databases/$(database)/documents/settings/clinic_settings`.
+- **Result**: Even a modified client cannot create an appointment if the admin has toggled `isBookingOpen` to false in the dashboard.
+
+### Phase 3 Compound Indexes Added
+- `queue`: `doctorId` ASC + `date` ASC (powers `QueueRepository.getLiveQueue`)
+- `appointments`: `doctorId` ASC + `appointmentDate` ASC (powers `AppointmentRepository.getAppointmentsByDoctorAndDate`)
+- `appointments`: `patientId` ASC + `appointmentDate` DESC (powers patient appointment history ordering)

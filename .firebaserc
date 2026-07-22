@@ -1,0 +1,13 @@
+{
+  "projects": {},
+  "targets": {
+    "dr-baiju-s-healthcare": {
+      "hosting": {
+        "dashboard": [
+          "1:766842057256:web:5b69f696d5a3685723bb1d"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

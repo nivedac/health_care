@@ -38,7 +38,7 @@ class QueueModel extends Equatable {
     return {
       'id': id,
       'doctorId': doctorId,
-      'date': date.toIso8601String(),
+      'date': '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
       'activeTokens': activeTokens.map((e) => e.toJson()).toList(),
       'currentToken': currentToken?.toJson(),
     };

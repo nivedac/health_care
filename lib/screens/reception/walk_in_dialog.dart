@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import '../../providers/queue_provider.dart';
+import '../../models/token_model.dart';
+import '../../repositories/booking_repository.dart';
 
 class WalkInDialog extends StatefulWidget {
   const WalkInDialog({super.key});
@@ -30,27 +33,77 @@ class _WalkInDialogState extends State<WalkInDialog> {
   void _generateToken() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isGenerating = true);
-      
-      // Simulate network request
-      await Future.delayed(const Duration(seconds: 1));
-      
+
       if (!mounted) return;
-      
+
       final queueProvider = Provider.of<QueueProvider>(context, listen: false);
-      queueProvider.generateToken(
-        patientName: _nameController.text, 
-        patientPhone: _phoneController.text,
-        isWalkIn: true,
-      );
-      
-      setState(() => _isGenerating = false);
-      
-      // Show success
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Token Generated Successfully!')),
-      );
-      
-      Navigator.of(context).pop();
+
+      try {
+        // Walk-in patients are booked by reception using a placeholder patientId.
+        // A proper patientId would come from looking up/creating a patient record.
+        // For Phase 3, we use the phone number as a stable walk-in identifier.
+        final phone = _phoneController.text.trim();
+        final walkInPatientId = 'walkin_$phone';
+
+        final bookingRepo = BookingRepository();
+        final result = await bookingRepo.bookAppointmentTransactionally(
+          patientId: walkInPatientId,
+          patientName: _nameController.text.trim(),
+          patientPhone: phone,
+          doctorId: 'dr_baiju_mb',
+          appointmentDate: DateTime.now(),
+          notes: _complaintController.text.trim().isEmpty
+              ? null
+              : _complaintController.text.trim(),
+        );
+
+        // Add token to live queue if open
+        if (queueProvider.liveQueue != null) {
+          final token = TokenModel(
+            id: const Uuid().v4(),
+            appointmentId: result.appointmentId,
+            tokenNumber: result.tokenNumber,
+            issuedAt: DateTime.now(),
+            status: QueueStatus.waiting, // Walk-in → immediately waiting
+            patientId: walkInPatientId,
+            patientName: _nameController.text.trim(),
+            patientPhone: phone,
+          );
+          await queueProvider.addTokenToQueue(token);
+        }
+
+        if (!mounted) return;
+        setState(() => _isGenerating = false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Token #${result.tokenNumber} generated for ${_nameController.text.trim()}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pop();
+      } on BookingClosedException catch (e) {
+        setState(() => _isGenerating = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message), backgroundColor: Colors.orange),
+        );
+      } on DuplicateBookingException catch (e) {
+        setState(() => _isGenerating = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message), backgroundColor: Colors.orange),
+        );
+      } catch (e) {
+        setState(() => _isGenerating = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Error generating token: $e'),
+              backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
