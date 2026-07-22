@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart';
 import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
@@ -27,9 +29,23 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       duration: const Duration(milliseconds: 800),
     )..forward();
 
-    // Auto navigate after 3.5 seconds
-    Future.delayed(const Duration(milliseconds: 3500), () {
-      if (mounted) {
+    // Attempt to restore existing Firebase session.
+    // This prevents forcing a re-login on every app launch.
+    Future.delayed(const Duration(milliseconds: 3500), () async {
+      if (!mounted) return;
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.restoreSession();
+      if (!mounted) return;
+      if (authProvider.isAuthenticated) {
+        final role = authProvider.currentUser?.role;
+        if (role == 'admin') {
+          context.go('/admin');
+        } else if (role == 'reception') {
+          context.go('/reception');
+        } else {
+          context.go('/patient');
+        }
+      } else {
         context.go('/login');
       }
     });

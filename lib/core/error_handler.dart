@@ -2,9 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'app_exceptions.dart';
 
+/// A centralized utility for handling and displaying application errors.
+///
+/// `ErrorHandler` intercepts exceptions from various layers of the app
+/// (e.g., Firebase Authentication, Firestore, custom application logic)
+/// and translates them into user-friendly error messages displayed via a [SnackBar].
 class ErrorHandler {
+  /// Global key required to access the [ScaffoldMessengerState] from anywhere
+  /// in the app without requiring a [BuildContext].
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
+  /// Main entry point for error handling.
+  ///
+  /// Takes a [dynamic] error object and attempts to parse it into a readable
+  /// string. Optionally accepts a [customMessage] to override the default parsing
+  /// and a [stackTrace] for debugging purposes.
   static void handleError(dynamic error, {String? customMessage, StackTrace? stackTrace}) {
     String message = 'An unexpected error occurred.';
 
@@ -31,22 +43,39 @@ class ErrorHandler {
 
   static String _handleFirebaseAuthError(FirebaseAuthException e) {
     switch (e.code) {
+      // Email/Password errors
       case 'invalid-email':
         return 'The email address is badly formatted.';
       case 'user-disabled':
-        return 'This user has been disabled.';
+        return 'This account has been disabled. Please contact support.';
       case 'user-not-found':
-        return 'No user found for that email.';
+        return 'No account found with this email address.';
       case 'wrong-password':
-        return 'Wrong password provided for that user.';
+        return 'Incorrect password. Please try again.';
       case 'email-already-in-use':
-        return 'The email address is already in use by another account.';
+        return 'This email is already registered.';
       case 'operation-not-allowed':
-        return 'Operation not allowed. Please contact support.';
+        return 'This sign-in method is not enabled. Please contact support.';
       case 'weak-password':
-        return 'The password provided is too weak.';
+        return 'Password is too weak. Please use a stronger password.';
+      // Phone Auth errors
+      case 'invalid-phone-number':
+        return 'Invalid phone number. Please enter a valid number with country code.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please wait a few minutes and try again.';
+      case 'session-expired':
+        return 'OTP has expired. Please request a new code.';
+      case 'invalid-verification-code':
+        return 'Invalid OTP code. Please check and try again.';
+      case 'missing-phone-number':
+        return 'Please enter your phone number.';
+      case 'quota-exceeded':
+        return 'SMS quota exceeded. Please try again later.';
+      // Network
+      case 'network-request-failed':
+        return 'Network error. Please check your internet connection.';
       default:
-        return e.message ?? 'Authentication failed.';
+        return e.message ?? 'Authentication failed. Please try again.';
     }
   }
 

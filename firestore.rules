@@ -1,0 +1,235 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HELPER FUNCTIONS
+    // =========================================================================
+
+    /// Returns true if the request is from an authenticated user.
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    /// Returns true if the authenticated user's UID matches the given UID.
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    /// Reads the user's role from the trusted Firestore users document.
+    /// SECURITY: Role is ALWAYS read from Firestore — never from the request body.
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    /// Returns true if the authenticated user has the specified role.
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+
+    /// Returns true if the user is an admin.
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    /// Returns true if the user is a receptionist.
+    function isReception() {
+      return hasRole('reception');
+    }
+
+    /// Returns true if the user is a doctor.
+    function isDoctor() {
+      return hasRole('doctor');
+    }
+
+    /// Returns true if the user is any kind of clinic staff.
+    function isStaff() {
+      return isAuthenticated() && getUserRole() in ['admin', 'reception', 'doctor'];
+    }
+
+    /// Returns true if the user is a patient.
+    function isPatient() {
+      return hasRole('patient');
+    }
+
+    /// Prevents role escalation: the incoming data must NOT contain a role field,
+    /// OR the role field must be unchanged from the existing document.
+    function roleIsUnchanged() {
+      return !('role' in request.resource.data) ||
+             request.resource.data.role == resource.data.role;
+    }
+
+    /// Prevents a new document from assigning any role other than 'patient'.
+    function newUserIsPatient() {
+      return request.resource.data.role == 'patient';
+    }
+
+    // =========================================================================
+    // USERS COLLECTION
+    // Stores auth profiles and roles for all users (patients + staff).
+    // =========================================================================
+    match /users/{userId} {
+      // Any authenticated user can read their own profile.
+      // Staff can read any user profile (needed for patient lookup).
+      allow read: if isOwner(userId) || isStaff();
+
+      // A new patient can create their OWN document, but ONLY with role='patient'.
+      // This is enforced both here and in the app code.
+      allow create: if isOwner(userId) && newUserIsPatient();
+
+      // A user can update their own document, but CANNOT change their own role.
+      // Admins can update any user's document (e.g., to assign staff roles).
+      allow update: if (isOwner(userId) && roleIsUnchanged()) || isAdmin();
+
+      // Only admins can delete user records.
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // PATIENTS COLLECTION
+    // Extended patient profile (health data, DOB, etc.).
+    // =========================================================================
+    match /patients/{patientId} {
+      // A patient can read their own record. Staff can read all patient records.
+      allow read: if isAuthenticated() &&
+                    (resource.data.userId == request.auth.uid || isStaff());
+
+      // A patient can create their own record.
+      // Reception staff can create records for walk-in patients.
+      allow create: if isAuthenticated() &&
+                      (request.resource.data.userId == request.auth.uid ||
+                       isReception() || isAdmin());
+
+      // A patient can update their own record.
+      // Reception/Admin can update any patient record (e.g., updating health info).
+      allow update: if isAuthenticated() &&
+                      (resource.data.userId == request.auth.uid ||
+                       isReception() || isAdmin());
+
+      // Only admins can delete patient records.
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // DOCTORS COLLECTION
+    // Doctor profiles (name, specialization, availability).
+    // =========================================================================
+    match /doctors/{doctorId} {
+      // Any authenticated user can read doctor information (needed for booking).
+      allow read: if isAuthenticated();
+
+      // Only admins can create, update, or delete doctor profiles.
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // APPOINTMENTS COLLECTION
+    // Appointment records linking patients to doctors.
+    // =========================================================================
+    match /appointments/{appointmentId} {
+      // A patient can read only their own appointments.
+      // Staff can read all appointments.
+      allow read: if isAuthenticated() &&
+                    (resource.data.patientId == request.auth.uid || isStaff());
+
+      // A patient can book an appointment for themselves only.
+      // Reception can book for any patient (walk-in).
+      allow create: if isAuthenticated() &&
+                      (request.resource.data.patientId == request.auth.uid ||
+                       isReception() || isAdmin());
+
+      // A patient can update their own appointment (e.g., cancel it).
+      // Staff can update any appointment (status changes, rescheduling).
+      // CONSTRAINT: Only allowed status transitions should be enforced 
+      //   ideally in Cloud Functions (e.g., patient cannot self-set 'completed').
+      allow update: if isAuthenticated() &&
+                      (resource.data.patientId == request.auth.uid ||
+                       isStaff());
+
+      // Only staff can hard-delete appointment records.
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // QUEUE COLLECTION
+    // Live daily queue state per doctor.
+    // =========================================================================
+    match /queue/{queueId} {
+      // Any authenticated user can read queue data (patients need to see their position).
+      allow read: if isAuthenticated();
+
+      // Only staff can modify the queue (call next patient, mark arrived, etc.).
+      // Patients CANNOT modify queue state (no self-advancing the queue).
+      allow write: if isStaff();
+    }
+
+    // =========================================================================
+    // TOKEN COUNTERS (SUBCOLLECTION under queue)
+    // Atomic counters used to generate safe token numbers.
+    // =========================================================================
+    match /queue/{queueId}/counters/{counterId} {
+      // Staff and system can read/write atomic counters.
+      allow read, write: if isStaff();
+    }
+
+    // =========================================================================
+    // SETTINGS COLLECTION
+    // Singleton clinic configuration document (clinic_settings).
+    // =========================================================================
+    match /settings/{docId} {
+      // Any authenticated user can read clinic settings (needed for booking rules).
+      allow read: if isAuthenticated();
+
+      // Only admins can modify clinic settings.
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // EMPLOYEES COLLECTION
+    // Staff employee records (receptionists, nurses, etc.).
+    // =========================================================================
+    match /employees/{employeeId} {
+      // Staff can read employee records (needed for reception dashboard).
+      // Patients cannot access employee data.
+      allow read: if isStaff();
+
+      // Only admins can create, update, or delete employee records.
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // HOLIDAYS COLLECTION
+    // Clinic holidays that disable bookings.
+    // =========================================================================
+    match /holidays/{holidayId} {
+      // Any authenticated user can read holidays (needed to disable booking dates).
+      allow read: if isAuthenticated();
+
+      // Only admins can manage holidays.
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // NOTIFICATIONS COLLECTION
+    // Per-user notification inbox.
+    // =========================================================================
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications.
+      allow read: if isAuthenticated() &&
+                    resource.data.userId == request.auth.uid;
+
+      // Only staff or the system (Cloud Functions) should create notifications.
+      // Patients cannot create notifications for others.
+      allow create: if isStaff();
+
+      // A user can update (mark as read) only their own notification.
+      allow update: if isAuthenticated() &&
+                      resource.data.userId == request.auth.uid &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+
+      // Users can delete their own notifications. Admins can delete any.
+      allow delete: if isAuthenticated() &&
+                      (resource.data.userId == request.auth.uid || isAdmin());
+    }
+  }
+}

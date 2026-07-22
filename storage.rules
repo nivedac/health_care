@@ -1,0 +1,121 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // =========================================================================
+    // HELPER FUNCTIONS
+    // =========================================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    /// Read the user's role from Firestore.
+    /// NOTE: Storage rules can call firestore() to cross-reference.
+    function getUserRole() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+
+    function isStaff() {
+      return isAuthenticated() && getUserRole() in ['admin', 'reception', 'doctor'];
+    }
+
+    /// Validates that the uploaded file is an image (JPEG or PNG).
+    function isImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+
+    /// Validates that the uploaded file is a PDF.
+    function isPdf() {
+      return request.resource.contentType == 'application/pdf';
+    }
+
+    /// Maximum image file size: 5 MB
+    function isValidImageSize() {
+      return request.resource.size <= 5 * 1024 * 1024;
+    }
+
+    /// Maximum document file size: 10 MB
+    function isValidDocSize() {
+      return request.resource.size <= 10 * 1024 * 1024;
+    }
+
+    // =========================================================================
+    // CLINIC ASSETS
+    // Public clinic logo, branding assets managed by admin.
+    // =========================================================================
+    match /clinic/{allPaths=**} {
+      // Anyone can read clinic assets (logo, branding shown in app).
+      allow read: if isAuthenticated();
+
+      // Only admins can upload/update clinic assets.
+      allow write: if isAdmin() && isImage() && isValidImageSize();
+    }
+
+    // =========================================================================
+    // DOCTOR PROFILE IMAGES
+    // /doctors/{doctorId}/profile.jpg
+    // =========================================================================
+    match /doctors/{doctorId}/{allPaths=**} {
+      // Any authenticated user can view doctor profile images.
+      allow read: if isAuthenticated();
+
+      // Only admins can upload doctor images.
+      allow write: if isAdmin() && isImage() && isValidImageSize();
+    }
+
+    // =========================================================================
+    // PATIENT FILES
+    // Patients can only access their own files.
+    // Reception/Admin can access any patient's files for clinical purposes.
+    // =========================================================================
+
+    // /patients/{patientId}/profile.jpg
+    match /patients/{patientId}/profile.jpg {
+      allow read: if isAuthenticated() &&
+                    (isOwner(patientId) || isStaff());
+
+      allow write: if isAuthenticated() &&
+                     (isOwner(patientId) || isStaff()) &&
+                     isImage() &&
+                     isValidImageSize();
+    }
+
+    // /patients/{patientId}/prescriptions/{appointmentId}.pdf
+    // Future: Doctor-generated prescriptions for a specific appointment.
+    match /patients/{patientId}/prescriptions/{fileName} {
+      // A patient can only read their own prescriptions.
+      // Staff can read for clinical review.
+      allow read: if isAuthenticated() &&
+                    (isOwner(patientId) || isStaff());
+
+      // Only staff (doctors/reception) can upload prescriptions.
+      // Patients cannot upload their own prescriptions.
+      allow write: if isStaff() && isPdf() && isValidDocSize();
+    }
+
+    // /patients/{patientId}/reports/{reportId}.pdf
+    // Future: Lab reports and diagnostic results.
+    match /patients/{patientId}/reports/{fileName} {
+      // A patient can read their own reports.
+      allow read: if isAuthenticated() &&
+                    (isOwner(patientId) || isStaff());
+
+      // Only staff can upload reports.
+      allow write: if isStaff() && isPdf() && isValidDocSize();
+    }
+
+    // Deny everything else by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
