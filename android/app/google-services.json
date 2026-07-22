@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766842057256",
+    "project_id": "dr-baiju-s-healthcare",
+    "storage_bucket": "dr-baiju-s-healthcare.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766842057256:android:c253d928b455658923bb1d",
+        "android_client_info": {
+          "package_name": "com.drbaijus.healthcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhEtcL-ZYnUpiBqpcb95Xkxe_Glf8eP6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

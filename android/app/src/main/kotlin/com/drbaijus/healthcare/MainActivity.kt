@@ -1,4 +1,4 @@
-package com.example.baijus
+package com.drbaijus.healthcare
 
 import io.flutter.embedding.android.FlutterActivity
 
