@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppTextField extends StatelessWidget {
   final String label;
   final String? hint;
+  final String? prefixText;
   final TextEditingController? controller;
   final bool isPassword;
   final TextInputType keyboardType;
@@ -12,6 +13,7 @@ class AppTextField extends StatelessWidget {
     super.key,
     required this.label,
     this.hint,
+    this.prefixText,
     this.controller,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
@@ -26,8 +28,9 @@ class AppTextField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       decoration: InputDecoration(
-        labelText: label,
+        labelText: label.isEmpty ? null : label,
         hintText: hint,
+        prefixText: prefixText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -73,11 +76,13 @@ class SearchField extends StatelessWidget {
 class OTPField extends StatefulWidget {
   final int length;
   final ValueChanged<String>? onCompleted;
+  final bool autofocus;
 
   const OTPField({
     super.key,
     this.length = 6,
     this.onCompleted,
+    this.autofocus = true,
   });
 
   @override
@@ -117,6 +122,7 @@ class _OTPFieldState extends State<OTPField> {
         (index) => SizedBox(
           width: 40,
           child: TextField(
+            autofocus: index == 0 ? widget.autofocus : false,
             controller: _controllers[index],
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,

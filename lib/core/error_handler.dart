@@ -55,7 +55,7 @@ class ErrorHandler {
       case 'email-already-in-use':
         return 'This email is already registered.';
       case 'operation-not-allowed':
-        return 'This sign-in method is not enabled. Please contact support.';
+        return 'Phone sign-in is currently unavailable. Please contact the clinic.';
       case 'weak-password':
         return 'Password is too weak. Please use a stronger password.';
       // Phone Auth errors

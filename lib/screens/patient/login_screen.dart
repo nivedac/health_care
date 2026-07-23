@@ -33,9 +33,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final phoneStr = _phoneController.text.trim();
     
-    final success = await authProvider.login(phoneStr, '');
+    // Normalize phone number for India (+91)
+    var phoneStr = _phoneController.text.trim();
+    // Strip accidental prefixes if user pasted +91 or 91 (assuming 10 digit number)
+    if (phoneStr.startsWith('+91')) {
+      phoneStr = phoneStr.substring(3).trim();
+    } else if (phoneStr.startsWith('91') && phoneStr.length == 12) {
+      phoneStr = phoneStr.substring(2).trim();
+    }
+    
+    final formattedPhone = '+91$phoneStr';
+    
+    final success = await authProvider.login(formattedPhone, '');
 
     if (success && mounted) {
       context.push('/otp');
@@ -44,10 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(content: Text('Failed to send OTP. Please try again.')),
       );
     }
-  }
-
-  void _onLoginWithOtp() {
-    context.push('/otp');
   }
 
   @override
@@ -154,18 +160,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Phone Number',
+                            'Mobile Number',
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 8),
                           AppTextField(
-                            label: '', // Using hint inside the unified field instead of floating label
-                            hint: '(555) 123-4567',
+                            label: '',
+                            hint: '98765 43210',
+                            prefixText: '+91 ',
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
-                            validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) return 'Required';
+                              final digitsOnly = val.replaceAll(RegExp(r'\D'), '');
+                              // Allow exactly 10 digits (ignoring any +91 that was accidentally pasted, though handled above)
+                              // We just check if it's 10 digits or if it includes country code and is 12.
+                              if (digitsOnly.length != 10 && !(digitsOnly.length == 12 && digitsOnly.startsWith('91'))) {
+                                return 'Enter a valid 10-digit mobile number';
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -217,27 +233,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _onContinue,
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Alternative Action
-                Center(
-                  child: TextButton.icon(
-                    onPressed: _onLoginWithOtp,
-                    icon: Icon(Icons.dialpad, color: colorScheme.primary),
-                    label: Text(
-                      'Login with OTP',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      backgroundColor: colorScheme.secondaryContainer.withValues(alpha: 0.3),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
                       ),
                     ),
                   ),
