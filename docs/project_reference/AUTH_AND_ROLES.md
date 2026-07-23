@@ -1,0 +1,1 @@
+# Auth & Roles\n- **Patient**: Phone Auth. Role `patient`.\n- **Reception**: Email/Password. Role `reception`.\n- **Admin**: Email/Password. Role `admin`.\n\nRoles are enforced server-side via `firestore.rules`.

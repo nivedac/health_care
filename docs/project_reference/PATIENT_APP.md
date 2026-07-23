@@ -1,0 +1,1 @@
+# Patient App\nAccessible by `patient`. Allows booking appointments, viewing queue status, and updating profiles.

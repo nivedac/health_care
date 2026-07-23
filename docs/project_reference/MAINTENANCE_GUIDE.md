@@ -1,0 +1,1 @@
+# Maintenance Guide\n- Monitor Firebase Quotas.\n- Ensure security rules are updated for new features.\n- Rotate credentials if compromised.\n

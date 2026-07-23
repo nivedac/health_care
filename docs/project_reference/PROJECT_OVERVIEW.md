@@ -1,0 +1,1 @@
+# Project Overview\nDr. Baijus Clinic Management System is a comprehensive platform designed to streamline patient, reception, and administrative workflows within the clinic. Built with Flutter and Firebase.\n\n## Architecture\nFollows Repository pattern with Riverpod state management. Firestore is the primary backend.\n

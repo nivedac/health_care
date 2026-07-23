@@ -1,0 +1,1 @@
+# Firebase Reference\n## Collections\n- `users`: User profiles (patients, admins, reception).\n- `appointments`: Booking records.\n- `settings`: Clinic configuration.\n- `doctors`: Doctor profiles.\n- `employees`: Staff records.\n- `tokenCounters`: Tracks daily queue numbers.\n- `bookingLocks`: Prevents duplicate bookings.\n

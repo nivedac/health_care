@@ -1,0 +1,1 @@
+# Booking & Token Flow\nBooking relies on a Firestore transaction that ensures atomic generation of token numbers via `tokenCounters` and prevents duplicate bookings via `bookingLocks`.

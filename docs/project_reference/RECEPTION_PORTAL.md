@@ -1,0 +1,1 @@
+# Reception Portal\nAccessible only by `reception` and `admin`. Handles walk-ins, marks patient arrivals, and tracks queue status in real-time.

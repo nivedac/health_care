@@ -1,0 +1,1 @@
+# Admin Portal\nAccessible only by `admin`. Handles clinic settings, staff management, doctor configuration, and booking control (open/close).

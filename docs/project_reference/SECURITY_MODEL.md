@@ -1,0 +1,1 @@
+# Security Model\nFirestore Security Rules restrict read/write access based on the user role in the `users` collection. A patient cannot mutate roles or access staff collections.

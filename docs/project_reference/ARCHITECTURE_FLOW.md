@@ -1,0 +1,1 @@
+# Architecture Flow\n## Patient Login\nUI (LoginScreen) -> AuthProvider (verifyOTP) -> AuthRepository (Firebase Auth) -> Firestore `users` check.\n\n## Patient Booking\nUI (BookTokenScreen) -> BookingRepository (bookAppointment) -> Firestore `runTransaction` on `bookingLocks` and `tokenCounters`.

@@ -1,0 +1,1 @@
+# Deployment Guide\n1. Generate release builds for Android (`flutter build apk --release`).\n2. Deploy Web Dashboard via Firebase Hosting.\n3. Ensure production SHA keys are registered in Firebase Console.
