@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/dashboard_layout.dart';
 import '../../providers/notification_provider.dart';
+import '../../repositories/notification_repository.dart';
+import '../../models/notification_model.dart';
+import '../../core/error_handler.dart';
 
 class NotificationCenterScreen extends StatefulWidget {
   const NotificationCenterScreen({super.key});
@@ -32,17 +35,27 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
     super.dispose();
   }
 
-  void _sendNotification() {
+  void _sendNotification() async {
     if (_formKey.currentState!.validate()) {
-      final provider = context.read<NotificationProvider>();
       
-      // Simulate sending mock notification to the active user as an example
-      provider.addMockNotification(
-        'u1', // Default mock user
-        _titleController.text,
-        _messageController.text,
-        'alert',
-      );
+      // Send real notification
+      try {
+        final notifRepo = NotificationRepository();
+        await notifRepo.createNotification(
+          NotificationModel(
+            id: '',
+            userId: 'global', // Broadcast to all users
+            title: _titleController.text,
+            message: _messageController.text,
+            timestamp: DateTime.now(),
+            isRead: false,
+          ),
+        );
+      } catch (e, stack) {
+        ErrorHandler.handleError(e, stackTrace: stack);
+      }
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Notification sent to $_targetGroup!')),

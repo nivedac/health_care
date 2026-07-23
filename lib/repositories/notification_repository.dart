@@ -13,6 +13,14 @@ class NotificationRepository {
         .get();
     return snapshot.docs.map((doc) => NotificationModel.fromJson({...doc.data(), 'id': doc.id})).toList();
   }
+  
+  Stream<List<NotificationModel>> getNotificationsStream(String userId) {
+    return _firestore.collection(_collection)
+        .where('userId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => NotificationModel.fromJson({...doc.data(), 'id': doc.id})).toList());
+  }
 
   Future<void> markAsRead(String id) async {
     await _firestore.collection(_collection).doc(id).update({'isRead': true});
@@ -22,4 +30,3 @@ class NotificationRepository {
     await _firestore.collection(_collection).add(notification.toJson());
   }
 }
-

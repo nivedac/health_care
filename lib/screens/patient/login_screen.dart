@@ -32,25 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // Since we are mocking login with AuthProvider that expects email and password
-    // for role checking, we will pass phone as email for mock purposes.
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final phoneStr = _phoneController.text.trim();
     
-    // In our mock, if phone contains 'patient', 'doctor' etc, it routes them.
-    // For now we assume patient flow since this is patient app.
-    final success = await authProvider.login(phoneStr, 'password');
+    final success = await authProvider.login(phoneStr, '');
 
     if (success && mounted) {
-      // The router config has a redirect that will push us to /patient automatically
-      // if we are authenticated. Wait, the prompt says after login is OTP.
-      // So we should navigate to OTP screen manually instead of authenticating immediately?
-      // "Login with OTP" implies we send an OTP, then auth happens in OTP screen.
-      // Let's adapt our flow: login screen just takes phone, goes to OTP.
       context.push('/otp');
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed (mock)')),
+        const SnackBar(content: Text('Failed to send OTP. Please try again.')),
       );
     }
   }

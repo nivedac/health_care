@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../repositories/patient_repository.dart';
+import '../../models/patient_model.dart';
+import '../../core/error_handler.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -46,12 +49,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     
     setState(() => _isLoading = true);
     
-    // Mock save
-    await Future.delayed(const Duration(seconds: 1));
-    
-    if (mounted) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final user = authProvider.currentUser;
+
+    if (user == null) {
       setState(() => _isLoading = false);
-      context.go('/patient');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Authentication error. Please log in again.')),
+      );
+      return;
+    }
+
+    try {
+      final patientRepo = PatientRepository();
+      
+      final patient = PatientModel(
+        id: user.id, // We will use userId as the document id for 1:1 mapping
+        userId: user.id,
+        fullName: _nameController.text.trim(),
+        phoneNumber: _phoneController.text.trim(),
+        age: int.tryParse(_ageController.text.trim()),
+        gender: _selectedGender,
+        bloodGroup: _selectedBloodGroup,
+        address: _addressController.text.trim().isEmpty ? null : _addressController.text.trim(),
+      );
+
+      await patientRepo.addOrUpdatePatientProfile(patient);
+
+      if (mounted) {
+        setState(() => _isLoading = false);
+        context.go('/patient');
+      }
+    } catch (e, stackTrace) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ErrorHandler.handleError(e, stackTrace: stackTrace);
+      }
     }
   }
 

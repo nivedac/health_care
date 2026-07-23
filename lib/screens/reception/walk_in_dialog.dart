@@ -4,6 +4,8 @@ import 'package:uuid/uuid.dart';
 import '../../providers/queue_provider.dart';
 import '../../models/token_model.dart';
 import '../../repositories/booking_repository.dart';
+import '../../repositories/patient_repository.dart';
+import '../../models/patient_model.dart';
 
 class WalkInDialog extends StatefulWidget {
   const WalkInDialog({super.key});
@@ -39,11 +41,20 @@ class _WalkInDialogState extends State<WalkInDialog> {
       final queueProvider = Provider.of<QueueProvider>(context, listen: false);
 
       try {
-        // Walk-in patients are booked by reception using a placeholder patientId.
-        // A proper patientId would come from looking up/creating a patient record.
-        // For Phase 3, we use the phone number as a stable walk-in identifier.
         final phone = _phoneController.text.trim();
-        final walkInPatientId = 'walkin_$phone';
+        final walkInPatientId = const Uuid().v4();
+
+        // Create or update anonymous patient profile for walk-ins
+        final patientRepo = PatientRepository();
+        final patientModel = PatientModel(
+          id: walkInPatientId,
+          userId: walkInPatientId,
+          fullName: _nameController.text.trim(),
+          phoneNumber: phone,
+          age: int.tryParse(_ageController.text.trim()),
+          gender: _selectedGender,
+        );
+        await patientRepo.addOrUpdatePatientProfile(patientModel);
 
         final bookingRepo = BookingRepository();
         final result = await bookingRepo.bookAppointmentTransactionally(

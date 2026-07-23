@@ -17,8 +17,7 @@ class BookTokenScreen extends StatefulWidget {
 }
 
 class _BookTokenScreenState extends State<BookTokenScreen> {
-  /// The doctor ID to book with.
-  /// TODO: In Phase 4 this will be passed as a route parameter.
+  /// The doctor ID to book with (hardcoded for single-doctor clinic).
   static const String _doctorId = 'dr_baiju_mb';
 
   @override

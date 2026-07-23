@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/queue_provider.dart';
 import '../../providers/auth_provider.dart';
-import '../../models/queue_model.dart';
 
 class LiveQueueScreen extends StatelessWidget {
   const LiveQueueScreen({super.key});
@@ -17,7 +16,40 @@ class LiveQueueScreen extends StatelessWidget {
     final queueProvider = Provider.of<QueueProvider>(context);
     
     final userPhone = authProvider.currentUser?.phoneNumber ?? '';
-    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
+    final queue = queueProvider.liveQueue;
+    
+    if (queue == null) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        appBar: AppBar(
+          backgroundColor: colorScheme.surface.withValues(alpha: 0.8),
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: colorScheme.onSurfaceVariant),
+            onPressed: () => context.pop(),
+          ),
+          title: Text(
+            "Live Queue",
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: colorScheme.primary,
+            ),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.event_busy, size: 64, color: colorScheme.onSurfaceVariant),
+              const SizedBox(height: 16),
+              Text('Queue Not Active', style: theme.textTheme.titleLarge?.copyWith(color: colorScheme.onSurfaceVariant)),
+              const SizedBox(height: 8),
+              Text('The clinic queue has not been started for today.', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.secondary)),
+            ],
+          ),
+        ),
+      );
+    }
 
     final myToken = queue.activeTokens.cast<dynamic>().firstWhere(
       (t) => t.patientPhone == userPhone && (t.status.name == 'waiting' || t.status.name == 'booked' || t.status.name == 'arrived'),
@@ -31,7 +63,6 @@ class LiveQueueScreen extends StatelessWidget {
     final patientsAhead = estWait ~/ QueueProvider.averageConsultationTime;
     
     // Calculate progress for circular indicator
-    // E.g., if token is 24, and current is 18, maybe progress is 18/24
     final progress = yourToken > 0 && currentToken <= yourToken ? (currentToken / yourToken).clamp(0.0, 1.0) : 0.0;
 
     return Scaffold(

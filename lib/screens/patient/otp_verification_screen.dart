@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,34 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   int _timeLeft = 119;
   bool _isVerifying = false;
+  Timer? _timer;
 
   String _currentOtp = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_timeLeft > 0) {
+        setState(() {
+          _timeLeft--;
+        });
+      } else {
+        _timer?.cancel();
+      }
+    });
+  }
 
   void _onVerify() async {
     if (_currentOtp.length < 6) {
@@ -47,11 +74,37 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     }
   }
 
-  void _onResend() {
-    // Mock resend
-    setState(() {
-      _timeLeft = 119;
-    });
+  void _onResend() async {
+    if (_timeLeft > 0) return;
+    
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final phone = authProvider.phoneNumber;
+    
+    if (phone == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error: Phone number not found. Please go back.')),
+      );
+      return;
+    }
+    
+    // Trigger real resend
+    final success = await authProvider.login(phone, '');
+    
+    if (mounted) {
+      if (success) {
+        setState(() {
+          _timeLeft = 119;
+          _startTimer();
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('OTP resent successfully.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to resend OTP. Please try again later.')),
+        );
+      }
+    }
   }
 
   @override

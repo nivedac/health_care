@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/queue_model.dart';
 import '../models/token_model.dart';
+import '../models/notification_model.dart';
 import '../repositories/queue_repository.dart';
+import '../repositories/notification_repository.dart';
 import 'notification_provider.dart';
 import '../core/error_handler.dart';
 
@@ -140,7 +142,7 @@ class QueueProvider extends ChangeNotifier {
   /// Automatically marks the currently consulting token as [QueueStatus.completed].
   /// Then advances to the first token with status [QueueStatus.waiting] or
   /// [QueueStatus.arrived], marking it [QueueStatus.inConsultation].
-  void callNextPatient(NotificationProvider? notifs) {
+  void callNextPatient(NotificationProvider? notifs) async {
     if (_liveQueue == null) return;
 
     // Complete the current consultation
@@ -164,32 +166,37 @@ class QueueProvider extends ChangeNotifier {
           currentToken: _liveQueue!.activeTokens
               .firstWhere((t) => t.id == nextToken.id));
 
-      notifs?.addMockNotification(
-        nextToken.patientId ?? 'unknown',
-        'Your Token Is Being Called',
-        'Please proceed to the consultation room. Doctor is ready.',
-        'alert',
-      );
+      if (nextToken.patientId != null && !nextToken.patientId!.startsWith('walkin_')) {
+        await _sendRealNotification(
+          nextToken.patientId!,
+          'Your Token Is Being Called',
+          'Please proceed to the consultation room. Doctor is ready.',
+          'alert',
+        );
+      }
 
       notifyListeners();
-      _checkRemainingPatients(notifs, nextToken.patientId);
+      _checkRemainingPatients(nextToken.patientId);
     } else {
       _liveQueue = _liveQueue!.copyWith(currentToken: null);
       notifyListeners();
     }
   }
 
-  void recallPatient(String tokenId, NotificationProvider? notifs) {
+  void recallPatient(String tokenId, NotificationProvider? notifs) async {
     _updateTokenStatus(tokenId, QueueStatus.called);
     final token = _liveQueue?.activeTokens
         .cast<TokenModel?>()
         .firstWhere((t) => t?.id == tokenId, orElse: () => null);
-    notifs?.addMockNotification(
-      token?.patientId ?? 'unknown',
-      'Missed Call',
-      'The doctor called you again. Please proceed to the room immediately.',
-      'alert',
-    );
+    
+    if (token?.patientId != null && !token!.patientId!.startsWith('walkin_')) {
+      await _sendRealNotification(
+        token.patientId!,
+        'Missed Call',
+        'The doctor called you again. Please proceed to the room immediately.',
+        'alert',
+      );
+    }
   }
 
   void skipPatient(String tokenId) {
@@ -260,15 +267,33 @@ class QueueProvider extends ChangeNotifier {
   // INTERNAL
   // --------------------------------------------------------------------------
 
-  void _checkRemainingPatients(NotificationProvider? notifs, String? patientId) {
-    if (_liveQueue == null) return;
+  Future<void> _sendRealNotification(String userId, String title, String body, String type) async {
+    try {
+      final notifRepo = NotificationRepository();
+      await notifRepo.createNotification(
+        NotificationModel(
+          id: '', // Will be assigned by Firestore
+          userId: userId,
+          title: title,
+          message: body,
+          timestamp: DateTime.now(),
+          isRead: false,
+        ),
+      );
+    } catch (e, stack) {
+      ErrorHandler.handleError(e, stackTrace: stack);
+    }
+  }
+
+  void _checkRemainingPatients(String? patientId) async {
+    if (_liveQueue == null || patientId == null || patientId.startsWith('walkin_')) return;
     final waiting = _liveQueue!.activeTokens
         .where((t) =>
             t.status == QueueStatus.waiting || t.status == QueueStatus.arrived)
         .length;
     if (waiting == 5) {
-      notifs?.addMockNotification(
-        patientId ?? 'unknown',
+      await _sendRealNotification(
+        patientId,
         'Only 5 Patients Remaining',
         'Your turn is approaching soon. Please be near the clinic.',
         'reminder',

@@ -5,7 +5,6 @@ import '../../widgets/dashboard_layout.dart';
 import 'walk_in_dialog.dart';
 import '../../providers/queue_provider.dart';
 import '../../providers/notification_provider.dart';
-import '../../models/queue_model.dart';
 import '../../models/token_model.dart';
 import 'package:intl/intl.dart';
 
@@ -19,11 +18,11 @@ class ReceptionDashboardScreen extends StatelessWidget {
     final queueProvider = Provider.of<QueueProvider>(context);
     final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     
-    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
-    final completedCount = queue.completedCount;
-    final waitingCount = queue.waitingCount;
-    final cancelledCount = queue.cancelledCount;
-    final currentToken = queue.currentToken;
+    final queue = queueProvider.liveQueue;
+    final completedCount = queue?.completedCount ?? 0;
+    final waitingCount = queue?.waitingCount ?? 0;
+    final cancelledCount = queue?.cancelledCount ?? 0;
+    final currentToken = queue?.currentToken;
     
     return DashboardLayout(
       child: SingleChildScrollView(
@@ -156,12 +155,27 @@ class ReceptionDashboardScreen extends StatelessWidget {
                   ),
                   
                   // Table Rows
-                  if (queue.activeTokens.isEmpty)
+                  if (queue == null)
+                    Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () => queueProvider.openQueue('dr_baiju_mb'),
+                              icon: const Icon(Icons.meeting_room),
+                              label: const Text('Open Clinic Queue for Today'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else if (queue.activeTokens.isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(32),
                       child: Center(child: Text('No patients in queue yet', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant))),
                     ),
-                  ...queue.activeTokens.map((token) {
+                  if (queue != null) ...queue.activeTokens.map((token) {
                     final isWaiting = token.status == QueueStatus.waiting || token.status == QueueStatus.arrived;
                     final initials = token.patientName?.isNotEmpty == true ? token.patientName!.substring(0, 1).toUpperCase() : '?';
                     return _buildTableRow(
@@ -194,7 +208,7 @@ class ReceptionDashboardScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Showing ${queue.activeTokens.length} patients in queue', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+                        Text('Showing ${queue?.activeTokens.length ?? 0} patients in queue', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
                         Row(
                           children: [
                             IconButton(icon: const Icon(Icons.chevron_left), onPressed: null, style: IconButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: colorScheme.outlineVariant)))),

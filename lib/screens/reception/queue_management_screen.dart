@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/queue_provider.dart';
 import '../../models/token_model.dart';
-import '../../models/queue_model.dart';
 import '../../widgets/dashboard_layout.dart';
 
 class QueueManagementScreen extends StatelessWidget {
@@ -14,12 +13,28 @@ class QueueManagementScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     
     final queueProvider = Provider.of<QueueProvider>(context);
-    final queue = queueProvider.liveQueue ?? QueueModel(id: 'mock', doctorId: 'mock', date: DateTime.now(), activeTokens: const []);
+    final queue = queueProvider.liveQueue;
+    
+    if (queue == null) {
+      return DashboardLayout(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.queue_play_next, size: 64, color: colorScheme.onSurfaceVariant),
+              const SizedBox(height: 16),
+              Text('Queue Not Active', style: theme.textTheme.headlineSmall),
+              const SizedBox(height: 8),
+              Text('The clinic queue has not been opened for today.', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+            ],
+          ),
+        ),
+      );
+    }
+    
     final currentToken = queue.currentToken;
     final waitingTokens = queue.activeTokens.where((t) => t.status == QueueStatus.waiting || t.status == QueueStatus.arrived).toList();
-    
-    // We will consume QueueProvider later if needed
-    // For now we just implement the UI exactly.
+
 
     return DashboardLayout(
       child: SingleChildScrollView(
